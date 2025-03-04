@@ -11,6 +11,8 @@ function Navbar() {
         <li><Link to="/contact" className="navbar-link">Contact</Link></li>
         <li><Link to="/diagnostic" className="navbar-link">Diagnostic</Link></li>
         <li><Link to="#coaches" className="navbar-link">Nos Coachs</Link></li> {/* Lien vers Nos Coachs */}
+        <li><Link to="/demo" className="demo-link">Demander une Démo</Link></li>
+
       </ul>
     </nav>
   );
