@@ -46,7 +46,7 @@ body {
   cursor: pointer;
   border-radius: 8px;
   transition: all 0.3s ease;
-  margin-left: 310px;
+  margin-left: 20px;
 }
 
 .btn:hover {
@@ -116,6 +116,36 @@ body {
   text-decoration: none;
   margin: 0 15px;
   font-weight: bold;
+}
+.demo-link {
+  background: linear-gradient(45deg, #7917e1, #2575fc); /* Dégradé dynamique */
+  color: white;
+  margin-left: 280px;
+  border: none; /* Pas de bordure visible */
+  border-radius: 50px; /* Coins légèrement arrondis */
+  padding: 12px 30px; /* Taille du bouton */
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.4s ease-in-out; /* Animation fluide */
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1); /* Ombre douce */
+}
+.demo-link:hover {
+  transform: translateY(-4px); /* Légère élévation au survol */
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2); /* Ombre plus marquée */
+  background: linear-gradient(45deg, #2575fc, #6a11cb); /* Inverser le dégradé */
+}
+
+.demo-link:active {
+  transform: translateY(2px); /* Effet de pression au clic */
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); /* Ombre réduite */
+}
+
+.demo-link:focus {
+  outline: none; /* Retirer la bordure de focus par défaut */
 }
 
 /* Décalage du contenu pour ne pas être caché par la navbar */
@@ -418,4 +448,158 @@ hr {
   height: 350px;
   border-radius: 8px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.demo-container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 40px;
+  background-color: #dbe0f4;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.content-flex {
+  display: flex;
+  justify-content: space-between;
+  gap: 60px;
+}
+
+.information {
+  flex: 1;
+}
+
+.information h1 {
+  font-size: 2.8rem;
+  margin-bottom: 25px;
+  color: #2c3e50;
+  font-weight: 700;
+}
+
+.information p {
+  font-size: 1.2rem;
+  margin-bottom: 25px;
+  color: #666;
+  line-height: 1.8;
+}
+
+.program {
+  margin-top: 40px;
+}
+
+.program h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.program ul {
+  list-style-type: none;
+}
+
+.program ul li {
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  color: #666;
+  padding-left: 25px;
+  position: relative;
+}
+
+.program ul li::before {
+  content: "•";
+  color: #007bff;
+  position: absolute;
+  left: 0;
+  font-size: 1.5rem;
+  top: -2px;
+}
+
+.demo-form {
+  flex: 1;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.demo-form h2 {
+  font-size: 2rem;
+  margin-bottom: 25px;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 8px;
+  color: #555;
+  font-weight: 500;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+  outline: none;
+}
+
+.error {
+  color: #dc3545;
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  color: #fff;
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background: linear-gradient(135deg, #0056b3, #004080);
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .content-flex {
+    flex-direction: column;
+  }
+
+  .information h1 {
+    font-size: 2.2rem;
+  }
+
+  .program h2 {
+    font-size: 1.8rem;
+  }
+
+  .demo-form h2 {
+    font-size: 1.8rem;
+  }
 }

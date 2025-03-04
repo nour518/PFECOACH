@@ -8,7 +8,7 @@ import Diagnostic from "./pages/Diagnostic";
 import PlanAction from "./components/PlanAction";
 import Navbar from "./components/Navbar"; // Ajout de la Navbar
 import Footer from "./components/Footer";
-
+import Demo from "./pages/Demo";
 
 // Importation du Footer
 import "./styles.css";
@@ -24,7 +24,7 @@ function App() {
         <Route path="/contact" element={<Contact />} /> {/* Nouvelle route */}
         <Route path="/diagnostic" element={<Diagnostic />} /> 
         <Route path="/planaction" element={<PlanAction />} /> 
-        
+        <Route path="/demo" element={<Demo/>} /> 
        
 
       </Routes>

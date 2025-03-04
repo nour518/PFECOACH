@@ -9,7 +9,7 @@ function Navbar() {
         <li><Link to="/" className="navbar-link">Accueil</Link></li>
         <li><Link to="/contact" className="navbar-link">Contact</Link></li>
         <li><Link to="/diagnostic" className="navbar-link">Diagnostic</Link></li>
-
+        <li><Link to="/demo" className="demo-link">Demander une Démo</Link></li>
       </ul>
     </nav>
   );
