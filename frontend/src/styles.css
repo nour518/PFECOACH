@@ -46,7 +46,9 @@ body {
   cursor: pointer;
   border-radius: 8px;
   transition: all 0.3s ease;
-  margin-left: 310px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
 }
 
 .btn:hover {
@@ -108,7 +110,8 @@ body {
   display: flex;
   margin: 0;
   padding: 0;
-  margin-left:600px ;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .navbar-link {
@@ -124,19 +127,16 @@ body {
   padding: 20px;
 }
 
-
-/* Image de fond demi-écran */
 .halfscreen-image {
-  position:absolute;
+  width: 100%;
+  height: 50vh; /* 50% de la hauteur de l'écran */
+  object-fit: cover;
+  filter: blur(4px); /* Flou pour l'effet visuel */
+  position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 50vh; /* 50% de la hauteur du viewport */
-  object-fit: cover;
   z-index: -1;
-  filter: blur(4px);
 }
-
 /* Image dans la page d'accueil */
 .home-image {
   width: 100%;
@@ -214,51 +214,6 @@ hr {
   accent-color: #6200ea;
 }
 
-/* Section Avis Clients */
-.testimonials {
-  margin: 60px auto;
-  max-width: 900px;
-  padding: 30px;
-  text-align: center;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 12px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-}
-
-/* Titre */
-.testimonials h2 {
-  margin-bottom: 25px;
-  color: #6200ea;
-  font-size: 2rem;
-  font-weight: bold;
-}
-
-/* Disposition en grille */
-.testimonial-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Adaptatif */
-  gap: 20px;
-  justify-content: center;
-}
-
-.testimonial-cards {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-}
-
-.testimonial-card {
-  width: 300px;
-  margin: 10px;
-}
-
-@media (max-width: 768px) {
-  .testimonial-card {
-      width: 100%;
-  }
-}
-
-
 /* Effet au survol */
 .testimonial-card:hover {
   transform: translateY(-5px);
@@ -285,74 +240,74 @@ hr {
   .testimonials {
     padding: 20px;
   }
-  
+
   .testimonial-card {
     width: 100%;
-  
-}
-/* Conteneur global pour la section Plan d'Action */
-.plan-action-section {
-  max-width: 800px;
-  margin: 40px auto;
-  padding: 20px;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
+  }
 
-/* Titre de la section */
-.plan-action-section h2 {
-  margin-bottom: 20px;
-  font-size: 2rem;
-  text-align: center;
-  color: #6200ea;
-  font-weight: bold;
-}
+  /* Conteneur global pour la section Plan d'Action */
+  .plan-action-section {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
 
-/* Style du tableau */
-.plan-action-section table {
-  width: 100%;
-  border-collapse: collapse;
-}
+  /* Titre de la section */
+  .plan-action-section h2 {
+    margin-bottom: 20px;
+    font-size: 2rem;
+    text-align: center;
+    color: #6200ea;
+    font-weight: bold;
+  }
 
-/* En-tête du tableau */
-.plan-action-section th,
-.plan-action-section td {
-  padding: 12px;
-  border-bottom: 1px solid #ddd;
-  text-align: left;
-  font-size: 1rem;
-}
+  /* Style du tableau */
+  .plan-action-section table {
+    width: 100%;
+    border-collapse: collapse;
+  }
 
-/* En-tête : fond coloré et texte blanc */
-.plan-action-section th {
-  background-color: #6200ea;
-  color: #fff;
-}
+  /* En-tête du tableau */
+  .plan-action-section th,
+  .plan-action-section td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+    font-size: 1rem;
+  }
 
-/* Cellules : texte en gris foncé */
-.plan-action-section td {
-  color: #333;
-  font-size: 0.95rem;
-}
+  /* En-tête : fond coloré et texte blanc */
+  .plan-action-section th {
+    background-color: #6200ea;
+    color: #fff;
+  }
 
-/* Style pour la case à cocher */
-.plan-action-section input[type="checkbox"] {
-  transform: scale(1.2);
-  cursor: pointer;
-  accent-color: #6200ea;
-}
+  /* Cellules : texte en gris foncé */
+  .plan-action-section td {
+    color: #333;
+    font-size: 0.95rem;
+  }
 
-/* Effet de survol sur une ligne du tableau */
-.plan-action-section tbody tr:hover {
-  background-color: #f9f9f9;
-}
+  /* Style pour la case à cocher */
+  .plan-action-section input[type="checkbox"] {
+    transform: scale(1.2);
+    cursor: pointer;
+    accent-color: #6200ea;
+  }
 
-/* Adaptation pour les petits écrans */
-@media (max-width: 600px) {
+  /* Effet de survol sur une ligne du tableau */
+  .plan-action-section tbody tr:hover {
+    background-color: #f9f9f9;
+  }
+
+  /* Adaptation pour les petits écrans */
   .plan-action-section {
     padding: 15px;
   }
+
   .plan-action-section th,
   .plan-action-section td {
     padding: 8px;
@@ -360,62 +315,207 @@ hr {
   }
 }
 
-}
-
-
 /* Header */
 .header {
-  background: linear-gradient(135deg, #4A90E2, #76B2E7);
+  text-align: center;
+  padding: 50px;
+  border-radius: 70px; /* Coins arrondis */
+  background-color: #95a9c0;
   color: white;
-  padding: 50px 20px;
-  border-radius: 10px;
-  margin-bottom: 20px;
+  margin-top: 150px;
 }
 
 .header h1 {
   font-size: 2.5rem;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+  
 }
 
 .header p {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
+  margin-bottom: 30px;
 }
 
-/* Bouton principal dans la section accueil */
+/* CTA Button */
 .cta-button {
-  background-color: #4CAF50; /* Vert agréable */
-  color: white;
-  font-size: 16px;
-  padding: 10px 20px;
+  background-color: #586db3;
   border: none;
-  border-radius: 5px;
+  color: white;
+  padding: 15px 30px;
+  font-size: 1.2rem;
   cursor: pointer;
+  border-radius: 40px;
   transition: background-color 0.3s ease;
 }
 
 .cta-button:hover {
-  background-color: #45a049;
+  background-color: #3347ff;
+}
+
+.about-content {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Espace entre l'image et le texte */
+    justify-content: center;
+    font-family:Georgia, 'Times New Roman', Times, serif
+}
+
+.about-image {
+    width: 600px;  /* Ajuste la taille de l'image comme tu veux */
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.about p {
+    max-width: 600px; /* Limite la largeur du texte pour un meilleur affichage */
+    font-size: 1.1rem;
+    line-height: 1.6;
+    text-align: justify;
 }
 
 
-/* Vidéo Section */
-.video-section {
-  margin-top: 40px;
-  padding: 20px;
+/* Testimonials Section */
+.testimonials {
+  padding: 50px;
+  background-color: #f9f9f9;
   text-align: center;
 }
 
-.video-section h2 {
-  margin-bottom: 20px;
+.testimonials h2 {
   font-size: 2rem;
-  font-weight: bold;
-  color: #6200ea;
+  margin-bottom: 30px;
 }
 
-.video-section iframe {
-  width: 100%;
-  max-width: 600px;
-  height: 350px;
-  border-radius: 8px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+.testimonial-cards {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.testimonial-card {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 300px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.testimonial-text {
+  font-style: italic;
+  margin-bottom: 15px;
+}
+
+.testimonial-name {
+  font-weight: bold;
+}
+
+/* Coaches Section */
+.coaches {
+  padding: 50px;
+  background-color: #ffffff;
+  text-align: center;
+}
+
+.coaches h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+}
+
+.coach-cards {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.coach-card {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 280px;
+  text-align: center;
+  margin-bottom: 20px;
+  transition: transform 0.3s ease;
+}
+
+.coach-card:hover {
+  transform: translateY(-10px);
+}
+
+.coach-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-bottom: 20px;
+}
+
+.coach-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.coach-card p {
+  font-size: 1rem;
+  color: #555;
+}
+
+/* Video Section */
+.video-section {
+  padding: 50px;
+  text-align: center;
+  background-color: #f5f5f5;
+}
+
+.video-section h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.video-section p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+}
+
+/* Clients Coachés Section */
+.clients-coached {
+  padding: 50px;
+  text-align: center;
+  background-color: #ffffff;
+}
+
+.clients-coached h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+}
+
+.statistics {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+.stat {
+  background-color: #007BFF;
+  color: white;
+  padding: 30px 40px;
+  border-radius: 10px;
+  width: 200px;
+  text-align: center;
+}
+
+.stat h3 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.stat p {
+  font-size: 1.2rem;
+}
+html {
+  scroll-behavior: smooth;
 }

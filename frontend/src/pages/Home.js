@@ -1,3 +1,4 @@
+// Home.js
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles.css";
@@ -23,9 +24,36 @@ const Home = () => {
         },
     ];
 
+    const coaches = [
+        {
+            id: 1,
+            name: "Jean Dupont",
+            specialty: "Coach de Vie",
+            bio: "Jean est un coach certifié avec plus de 10 ans d'expérience. Il aide ses clients à atteindre un équilibre personnel et professionnel.",
+            image: "https://randomuser.me/api/portraits/men/1.jpg"
+        },
+        {
+            id: 2,
+            name: "Marie Lemoine",
+            specialty: "Coach en Développement Personnel",
+            bio: "Marie est spécialisée dans le développement personnel et l'épanouissement. Elle aide ses clients à prendre confiance en eux.",
+            image: "https://randomuser.me/api/portraits/women/2.jpg"
+        },
+        {
+            id: 3,
+            name: "Luc Martin",
+            specialty: "Coach en Carrière",
+            bio: "Luc aide ses clients à réussir dans leur carrière en se fixant des objectifs professionnels clairs et atteignables.",
+            image: "https://randomuser.me/api/portraits/men/3.jpg"
+        }
+    ];
+
     return (
         <div className="home-container">
-            <header className="header">
+          
+
+            {/* Header Section */}
+            <header className="header"  >
                 <h1>Transformez votre vie avec notre coaching personnalisé</h1>
                 <p>Atteignez vos objectifs, surmontez vos défis et vivez une vie épanouie grâce à un accompagnement sur mesure, conçu pour vous.</p>
                 <button className="cta-button" onClick={() => navigate("/test")}>
@@ -33,32 +61,34 @@ const Home = () => {
                 </button>
             </header>
 
-            <img 
-                src="https://cdn.zarlasites.com/image/bf5f3790e5d887e83f7e339fe1c29b792bfbe94e64eda9ecbcba6d09ee984151/mobile-575" 
-                alt="Coaching de vie - Accompagnement personnalisé" 
-                className="halfscreen-image"
-            />
-
-            <div className="container">
-                <h2>Pourquoi Choisir Notre Coaching ?</h2>
-                <div className="features">
-                    <div className="feature">
-                        <h3>🔍 Évaluation Personnalisée</h3>
-                        <p>Identifiez vos besoins réels pour mieux cibler vos priorités et améliorer votre bien-être.</p>
-                    </div>
-                    <div className="feature">
-                        <h3>📈 Plan d'Action Sur Mesure</h3>
-                        <p>Recevez un programme d'action détaillé, spécifique à vos objectifs et à votre situation.</p>
-                    </div>
-                    <div className="feature">
-                        <h3>💡 Accompagnement d'un Coach</h3>
-                        <p>Bénéficiez de conseils d'experts qui vous soutiendront à chaque étape pour réaliser vos rêves.</p>
-                    </div>
+            {/* Image à demi-écran avec flou */}
+            <section className="photo-section">
+                <div className="image-background">
+                    <img 
+                        src="https://www.pnl.ch/wp-content/uploads/2018/10/comprendre-metier-coach.jpg" 
+                        alt="Coaching de vie - Accompagnement personnalisé" 
+                        className="halfscreen-image"
+                    />
                 </div>
-            </div>
+            </section>
 
-            {/* Section Avis Clients */}
-            <div className="testimonials">
+            <section className="about">
+    <h2>Qu'est-ce que notre plateforme de coaching ?</h2>
+    <div className="about-content">
+        <img 
+            src="https://www.agencenice.fr/wp-content/uploads/2024/08/coach-de-vie.jpg" 
+            alt="Plateforme de Coaching"
+            className="about-image"
+        />
+        <p>
+            Notre plateforme offre des services de coaching personnalisé pour vous aider à atteindre vos objectifs de vie, qu'ils soient personnels ou professionnels. Grâce à une équipe de coachs certifiés, nous vous fournissons un accompagnement sur mesure pour chaque étape de votre parcours.
+        </p>
+    </div>
+</section>
+
+
+            {/* Testimonial Section */}
+            <section id="testimonials" className="testimonials">
                 <h2>Avis de nos clients</h2>
                 <div className="testimonial-cards">
                     {testimonials.map((item) => (
@@ -68,10 +98,26 @@ const Home = () => {
                         </div>
                     ))}
                 </div>
-            </div>
+            </section>
 
-            {/* Section Vidéo */}
-            <div className="video-section">
+           
+<section id="coaches" className="coaches">
+    <h2>Nos Coachs</h2>
+    <div className="coach-cards">
+        {coaches.map((coach) => (
+            <div key={coach.id} className="coach-card">
+                <img src={coach.image} alt={coach.name} className="coach-image" />
+                <h3>{coach.name}</h3>
+                <p><strong>{coach.specialty}</strong></p>
+                <p>{coach.bio}</p>
+            </div>
+        ))}
+    </div>
+</section>
+
+
+            {/* Video Section */}
+            <section className="video-section">
                 <h2>Découvrez comment notre approche peut changer votre vie</h2>
                 <p>Regardez cette vidéo pour en savoir plus sur notre méthode et les résultats que vous pouvez attendre.</p>
                 <iframe 
@@ -83,17 +129,26 @@ const Home = () => {
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                     allowFullScreen
                 ></iframe>
-            </div>
+            </section>
 
-            {/* Section FAQ */}
-            <div className="faq">
-                <h2>Questions fréquentes</h2>
-                <ul>
-                    <li><strong>Comment se passe le test d'évaluation ?</strong> Vous remplissez un questionnaire rapide pour déterminer vos besoins et objectifs.</li>
-                    <li><strong>Combien de temps dure un coaching ?</strong> Chaque coaching est adapté à vos besoins, mais en général, une session dure entre 60 et 90 minutes.</li>
-                    <li><strong>Est-ce que les coachs sont certifiés ?</strong> Oui, tous nos coachs sont certifiés et ont plusieurs années d'expérience.</li>
-                </ul>
-            </div>
+            {/* Clients Coachés Section */}
+            <section className="clients-coached">
+                <h2>Nos Résultats</h2>
+                <div className="statistics">
+                    <div className="stat">
+                        <h3>95%</h3>
+                        <p>Clients satisfaits</p>
+                    </div>
+                    <div className="stat">
+                        <h3>80%</h3>
+                        <p>Clients ayant atteint leurs objectifs</p>
+                    </div>
+                    <div className="stat">
+                        <h3>60%</h3>
+                        <p>Clients ayant obtenu une promotion professionnelle</p>
+                    </div>
+                </div>
+            </section>
 
         </div>
     );
