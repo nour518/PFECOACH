@@ -17,11 +17,19 @@ const PlanAction = () => {
 
   const days = Array.from({ length: 30 }, (_, i) => i + 1);
   const [checked, setChecked] = useState({});
+  const [evaluations, setEvaluations] = useState({});
 
   const toggleCheck = (actionId, day) => {
     setChecked(prev => ({
       ...prev,
       [`${actionId}-${day}`]: !prev[`${actionId}-${day}`]
+    }));
+  };
+
+  const handleEvaluationChange = (actionId, day, value) => {
+    setEvaluations(prev => ({
+      ...prev,
+      [`${actionId}-${day}`]: value
     }));
   };
 
@@ -36,6 +44,7 @@ const PlanAction = () => {
               {days.map(day => (
                 <th key={day}>{day}</th>
               ))}
+              <th>Évaluation</th> {/* Nouvelle colonne pour l'évaluation */}
             </tr>
           </thead>
           <tbody>
@@ -51,6 +60,14 @@ const PlanAction = () => {
                     />
                   </td>
                 ))}
+                <td className="evaluation-cell">
+                  <input
+                    type="text"
+                    placeholder="Évaluer"
+                    value={evaluations[`${action.id}-evaluation`] || ''}
+                    onChange={(e) => handleEvaluationChange(action.id, 'evaluation', e.target.value)}
+                  />
+                </td>
               </tr>
             ))}
           </tbody>
