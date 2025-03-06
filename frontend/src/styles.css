@@ -95,7 +95,7 @@ body {
 
 /* Navbar fixe */
 .navbar {
-  background-color: #6e6d6f;
+  background-color: transparent;
   width: 100%;
   position: fixed;
   top: 0;
@@ -104,7 +104,7 @@ body {
   display: flex;
   align-items: center;
   padding: 0 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
   z-index: 1000;
 
 }
@@ -120,16 +120,20 @@ body {
 }
 
 .navbar-link {
-  color: #fff;
+  color: #2575fc;
   text-decoration: none;
   margin: 0 15px;
   font-weight: bold;
+  font-size: 20px;
 }
 .coach-link {
-  color: #fff;
+  color: #2575fc;
   text-decoration: none;
   margin: 0 15px;
   font-weight: bold;
+  font-size: 20px;
+  
+
 }
 .demo-link {
   background: linear-gradient(45deg, #7917e1, #2575fc); /* Dégradé dynamique */
