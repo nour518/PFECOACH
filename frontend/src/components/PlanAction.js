@@ -1,48 +1,61 @@
-import React, { useState } from "react";
-import "../styles.css"; // Import du fichier CSS pour le style
+import React, { useState } from 'react';
+import "../styles.css";
 
 const PlanAction = () => {
-  // Liste des objectifs avec leur état (coché ou non)
-  const [objectifs, setObjectifs] = useState([
-    { id: 1, texte: "Définir une vision claire de ma vie", fait: false },
-    { id: 2, texte: "Établir une routine quotidienne", fait: false },
-    { id: 3, texte: "Pratiquer la méditation 10 min/jour", fait: false },
-  ]);
+  const actions = [
+    { id: 1, objectif: "Clarifier sa vision et ses valeurs personnelles" },
+    { id: 2, objectif: "Fixer des objectifs de vie alignés avec ses aspirations" },
+    { id: 3, objectif: "Gérer efficacement son stress et ses émotions" },
+    { id: 4, objectif: "Améliorer la confiance et l'estime de soi" },
+    { id: 5, objectif: "Développer une routine quotidienne équilibrée" },
+    { id: 6, objectif: "Renforcer la motivation et la discipline personnelle" },
+    { id: 7, objectif: "Créer un plan d'action pour atteindre ses objectifs" },
+    { id: 8, objectif: "Améliorer ses relations interpersonnelles" },
+    { id: 9, objectif: "Adopter une attitude positive et proactive" },
+    { id: 10, objectif: "Faire le bilan de ses progrès et ajuster sa stratégie" }
+  ];
 
-  // Fonction pour marquer un objectif comme complété
-  const toggleObjectif = (id) => {
-    setObjectifs(
-      objectifs.map((obj) =>
-        obj.id === id ? { ...obj, fait: !obj.fait } : obj
-      )
-    );
+  const days = Array.from({ length: 30 }, (_, i) => i + 1);
+  const [checked, setChecked] = useState({});
+
+  const toggleCheck = (actionId, day) => {
+    setChecked(prev => ({
+      ...prev,
+      [`${actionId}-${day}`]: !prev[`${actionId}-${day}`]
+    }));
   };
 
   return (
-    <div className="plan-action">
+    <div className="plan-container">
       <h2>Plan d'Action</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Objectif</th>
-            <th>Statut</th>
-          </tr>
-        </thead>
-        <tbody>
-          {objectifs.map((obj) => (
-            <tr key={obj.id}>
-              <td>{obj.texte}</td>
-              <td>
-                <input
-                  type="checkbox"
-                  checked={obj.fait}
-                  onChange={() => toggleObjectif(obj.id)}
-                />
-              </td>
+      <div className="table-responsive">
+        <table className="modern-table">
+          <thead>
+            <tr>
+              <th>Objectif</th>
+              {days.map(day => (
+                <th key={day}>{day}</th>
+              ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {actions.map(action => (
+              <tr key={action.id}>
+                <td>{action.objectif}</td>
+                {days.map(day => (
+                  <td key={day} className="checkbox-cell">
+                    <input 
+                      type="checkbox" 
+                      checked={checked[`${action.id}-${day}`] || false} 
+                      onChange={() => toggleCheck(action.id, day)} 
+                    />
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

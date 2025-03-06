@@ -92,9 +92,10 @@ body {
   resize: none;
 }
 
+
 /* Navbar fixe */
 .navbar {
-  background-color: #6200ea;
+  background-color: #6e6d6f;
   width: 100%;
   position: fixed;
   top: 0;
@@ -105,6 +106,7 @@ body {
   padding: 0 20px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 1000;
+
 }
 
 /* Liste de la navbar */
@@ -118,6 +120,12 @@ body {
 }
 
 .navbar-link {
+  color: #fff;
+  text-decoration: none;
+  margin: 0 15px;
+  font-weight: bold;
+}
+.coach-link {
   color: #fff;
   text-decoration: none;
   margin: 0 15px;
@@ -186,7 +194,7 @@ body {
 
 /* Footer */
 footer {
-  background-color: #6200ea;
+  background-color: #57545b;
   padding: 20px 10px;
   color: white;
   text-align: center;
@@ -247,105 +255,53 @@ hr {
   accent-color: #6200ea;
 }
 
-/* Effet au survol */
-.testimonial-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+/* Styles généraux pour la section des témoignages */
+.testimonials {
+  padding: 50px;
+  background-color: #f7f7f7;
+  text-align: center;
 }
 
-/* Texte */
+.testimonial-cards {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.testimonial-card {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 250px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer; /* Curseur personnalisé pour les éléments interactifs */
+}
+
+.testimonial-card:hover {
+  transform: translateY(-10px); /* Légère élévation au survol */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
 .testimonial-text {
   font-style: italic;
-  color: #333;
-  font-size: 1rem;
+  color: #555;
+  margin-bottom: 10px;
 }
 
-/* Nom */
 .testimonial-name {
   font-weight: bold;
-  color: #6200ea;
-  font-size: 1.1rem;
-  margin-top: 10px;
+  color: #007bff;
 }
 
-/* Responsive */
-@media (max-width: 600px) {
-  .testimonials {
-    padding: 20px;
-  }
+/* Effet de curseur personnalisé */
+.testimonial-card {
+  cursor: pointer;
+}
 
-  .testimonial-card {
-    width: 100%;
-  }
-
-  /* Conteneur global pour la section Plan d'Action */
-  .plan-action-section {
-    max-width: 800px;
-    margin: 40px auto;
-    padding: 20px;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  }
-
-  /* Titre de la section */
-  .plan-action-section h2 {
-    margin-bottom: 20px;
-    font-size: 2rem;
-    text-align: center;
-    color: #6200ea;
-    font-weight: bold;
-  }
-
-  /* Style du tableau */
-  .plan-action-section table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-
-  /* En-tête du tableau */
-  .plan-action-section th,
-  .plan-action-section td {
-    padding: 12px;
-    border-bottom: 1px solid #ddd;
-    text-align: left;
-    font-size: 1rem;
-  }
-
-  /* En-tête : fond coloré et texte blanc */
-  .plan-action-section th {
-    background-color: #6200ea;
-    color: #fff;
-  }
-
-  /* Cellules : texte en gris foncé */
-  .plan-action-section td {
-    color: #333;
-    font-size: 0.95rem;
-  }
-
-  /* Style pour la case à cocher */
-  .plan-action-section input[type="checkbox"] {
-    transform: scale(1.2);
-    cursor: pointer;
-    accent-color: #6200ea;
-  }
-
-  /* Effet de survol sur une ligne du tableau */
-  .plan-action-section tbody tr:hover {
-    background-color: #f9f9f9;
-  }
-
-  /* Adaptation pour les petits écrans */
-  .plan-action-section {
-    padding: 15px;
-  }
-
-  .plan-action-section th,
-  .plan-action-section td {
-    padding: 8px;
-    font-size: 0.9rem;
-  }
+.testimonial-card:hover {
+  cursor: pointer;  /* Remarque que le curseur peut également être changé ici */
 }
 
 /* Header */
@@ -706,3 +662,64 @@ button:active {
     font-size: 1.8rem;
   }
 }
+.plan-container {
+  max-width: 100%;
+  padding: 20px;
+  margin-top:50px ;
+  background: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+}
+
+h2 {
+  text-align: center;
+  color: #201b79;
+  font-size: 24px;
+  margin-bottom: 20px;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.modern-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.modern-table th, .modern-table td {
+  padding: 12px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+.modern-table th {
+  background: #7e8b99;
+  color: white;
+  font-weight: bold;
+  position: sticky;
+  top: 0;
+}
+
+.modern-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.modern-table tr:hover {
+  background-color: #ddd;
+}
+
+.checkbox-cell {
+  width: 30px;
+}
+
+input[type="checkbox"] {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+

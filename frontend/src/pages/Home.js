@@ -87,18 +87,19 @@ const Home = () => {
 </section>
 
 
-            {/* Testimonial Section */}
-            <section id="testimonials" className="testimonials">
-                <h2>Avis de nos clients</h2>
-                <div className="testimonial-cards">
-                    {testimonials.map((item) => (
-                        <div key={item.id} className="testimonial-card">
-                            <p className="testimonial-text">"{item.text}"</p>
-                            <p className="testimonial-name">- {item.name}</p>
-                        </div>
-                    ))}
-                </div>
-            </section>
+        {/* Testimonial Section */}
+<section id="testimonials" className="testimonials">
+    <h2>Avis de nos clients</h2>
+    <div className="testimonial-cards">
+        {testimonials.map((item) => (
+            <div key={item.id} className="testimonial-card">
+                <p className="testimonial-text">"{item.text}"</p>
+                <p className="testimonial-name">- {item.name}</p>
+            </div>
+        ))}
+    </div>
+</section>
+
 
            
 <section id="coaches" className="coaches">
@@ -114,6 +115,7 @@ const Home = () => {
         ))}
     </div>
 </section>
+
 
 
             {/* Video Section */}
