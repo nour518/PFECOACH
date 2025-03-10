@@ -8,6 +8,8 @@ import PlanAction from "./components/PlanAction"
 import Navbar from "./components/Navbar"
 import Footer from "./components/Footer"
 import Demo from "./pages/Demo"
+import Signup from "./pages/Signup";
+import Login from './pages/Login';
 
 import "./styles.css"
 
@@ -36,6 +38,9 @@ function App() {
         { path: "diagnostic", element: <Diagnostic /> },
         { path: "planaction", element: <PlanAction /> },
         { path: "demo", element: <Demo /> },
+       { path:"/signup",element:<Signup /> },
+       { path:"/login",element:<Login/> },
+
       ],
     },
   ])

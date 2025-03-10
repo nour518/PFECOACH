@@ -25,7 +25,7 @@ function Navbar() {
         <li>
           <Link to="/diagnostic"className="navbar-link">Diagnostic</Link>
         </li>
-       
+
         {/* Remplacez HashLink par un Link avec onClick */}
         <li>
           <Link
@@ -41,7 +41,9 @@ function Navbar() {
         <li>
           <Link to="/demo"className="demo-link">Demander une Démo</Link>
         </li>
-      </ul>
+        <li><Link to="/signup" className="navbar-link">Sign Up</Link></li>
+        <li><Link to="/login" className="navbar-link">Sign In</Link></li> {/* Lien Sign In */}
+         </ul>
     </nav>
   )
 }
