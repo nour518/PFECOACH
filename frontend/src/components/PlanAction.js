@@ -44,7 +44,7 @@ const PlanAction = () => {
               {days.map(day => (
                 <th key={day}>{day}</th>
               ))}
-              <th>Évaluation</th> {/* Nouvelle colonne pour l'évaluation */}
+              <th>Évaluation</th>
             </tr>
           </thead>
           <tbody>
@@ -61,10 +61,11 @@ const PlanAction = () => {
                   </td>
                 ))}
                 <td className="evaluation-cell">
+                  {/* Nouveau champ d'évaluation pour chaque action */}
                   <input
                     type="text"
                     placeholder="Évaluer"
-                    value={evaluations[`${action.id}-evaluation`] || ''}
+                    value={evaluations[`${action.id}`] || ''}
                     onChange={(e) => handleEvaluationChange(action.id, 'evaluation', e.target.value)}
                   />
                 </td>

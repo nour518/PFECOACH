@@ -7,7 +7,8 @@ const cors = require("cors");
 const userRoutes = require("./routes/userRoutes");
 const geminiRoutes = require("./routes/geminiRoutes"); // Importer les routes Gemini
 
-console.log("Clé OpenAI chargée ?", process.env.OPENAI_API_KEY ? "OUI" : "NON");
+
+console.log("Clé Gemini :", process.env.GEMINI_API_KEY);
 
 const app = express();
 app.use(express.json());

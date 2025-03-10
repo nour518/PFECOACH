@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import axios from "axios";
 import "../styles.css";
 
@@ -7,13 +6,52 @@ function Test() {
   const [responses, setResponses] = useState({});
   const [diagnostic, setDiagnostic] = useState("");
 
-
   const questions = [
-    { question: "Comment décririez-vous votre niveau de satisfaction actuel dans la vie ?", options: ["Très satisfait(e)", "Plutôt satisfait(e)", "Neutre", "Plutôt insatisfait(e)", "Très insatisfait(e)"], name: "satisfaction" },
-    { question: "Quel domaine de votre vie souhaiteriez-vous améliorer en priorité ?", options: ["Carrière", "Relations", "Santé", "Développement personnel", "Équilibre pro/perso"], name: "priority" },
-    { question: "Quel est votre plus grand défi actuel ?", options: ["Gérer mon temps", "Surmonter mes peurs", "Atteindre mes objectifs", "Améliorer mes relations", "Trouver un sens"], name: "challenge" },
-    { question: "Comment gérez-vous les obstacles ?", options: ["Je les évite", "Je me décourage", "J'apprends de mes erreurs", "Je demande de l’aide", "Je les vois comme une opportunité"], name: "obstacles" },
-    { question: "Quel est votre niveau d’énergie au quotidien ?", options: ["Élevé", "Moyen", "Faible", "Variable", "Je me sens perdu(e)"], name: "energy" },
+    // 🎯 Clarification de la Situation
+    { question: "Qu'est-ce qui vous apporte aujourd'hui ?", name: "current_motivation" },
+    { question: "Où êtes-vous actuellement ?", name: "current_location" },
+    { question: "Comment décririez-vous votre situation en ce moment ?", name: "current_situation" },
+    { question: "Qu'est-ce qui fonctionne bien dans votre vie actuellement ?", name: "positives" },
+    { question: "Qu'est-ce qui ne fonctionne pas comme vous le souhaitez ?", name: "negatives" },
+    { question: "Quelles sont les trois choses que vous aimez vraiment dans votre vie ?", name: "three_likes" },
+    { question: "Que ressentez-vous quand vous pensez à cette situation ?", name: "feelings" },
+    { question: "Qu'est-ce qui vous manque aujourd'hui pour vous sentir épanoui ?", name: "missing" },
+    { question: "Sur quoi vous basez-vous pour dire cela ?", name: "basis" },
+    { question: "Quelle est votre plus grande préoccupation actuellement ?", name: "biggest_concern" },
+
+    // 🌟 Définition des Objectifs
+    { question: "Que voulez-vous vraiment accomplir ?", name: "goal" },
+    { question: "Comment sauriez-vous que vous avez atteint votre objectif ?", name: "goal_measurement" },
+    { question: "Qu'est-ce qui est vraiment important pour vous dans cette situation ?", name: "important_factors" },
+    { question: "Comment vous sentirez-vous une fois que vous atteindrez votre but ?", name: "goal_feelings" },
+    { question: "Quel serait le meilleur résultat possible ?", name: "best_outcome" },
+    { question: "À quoi ressemblerait le succès pour vous ?", name: "success_definition" },
+    { question: "Si tout était possible, que voudriez-vous ?", name: "dream_scenario" },
+
+    // 🕵️‍♂️ Prise de Conscience
+    { question: "Qu'est-ce qui vous empêche d'avancer ?", name: "obstacles" },
+    { question: "De quoi avez-vous peur ?", name: "fears" },
+    { question: "Quelles croyances retenez-vous ?", name: "beliefs" },
+    { question: "Que se passerait-il si vous ne faisiez rien ?", name: "consequences" },
+    { question: "Comment cette situation affecte-t-elle d'autres domaines de votre vie ?", name: "life_impact" },
+
+    // 🔧 Exploration des options
+    { question: "Quelles solutions envisagez-vous ?", name: "possible_solutions" },
+    { question: "Quelles autres possibilités existent-t-il ?", name: "other_options" },
+    { question: "Si vous n'aviez pas peur, que feriez-vous ?", name: "fearless_action" },
+    { question: "Que conseilleriez-vous à un ami dans votre situation ?", name: "advice_to_friend" },
+
+    // ⚙️ Planification de l'Action
+    { question: "Quel est le premier petit pas que vous pourriez faire ?", name: "first_step" },
+    { question: "Quand allez-vous le faire ?", name: "timeline" },
+    { question: "Comment allez-vous mesurer votre progrès ?", name: "progress_tracking" },
+    { question: "Qui pourrait vous soutenir dans cette démarche ?", name: "support_system" },
+
+    // 💡 Réflexion et Apprentissage
+    { question: "Qu'avez-vous appris sur vous-même aujourd'hui ?", name: "self_learning" },
+    { question: "Qu'est-ce qui vous a le plus surpris lors de cette réflexion ?", name: "biggest_surprise" },
+    { question: "Que pouvez-vous célébrer aujourd'hui ?", name: "celebration" },
+    { question: "Quel conseil donneriez-vous à votre futur 'vous' ?", name: "advice_to_future_self" },
   ];
 
   const handleChange = (questionName, value) => {
@@ -35,7 +73,8 @@ function Test() {
         return;
       }
 
-      const res = await axios.post("http://localhost:5002/api/openai/chat", { message: prompt });
+      const res = await axios.post("http://localhost:5002/api/gemini/generate-content", { text: prompt });
+
       setDiagnostic(res.data.response);
       localStorage.setItem("diagnostic", res.data.response);
     } catch (err) {
@@ -51,21 +90,12 @@ function Test() {
         {questions.map((q, index) => (
           <div key={index} className="question">
             <label>{q.question}</label>
-            <div className="options">
-              {q.options.map((option, idx) => (
-                <label key={idx}>
-                  <input
-                    type="radio"
-                    name={q.name}
-                    value={option}
-                    checked={responses[q.name] === option}
-                    onChange={() => handleChange(q.name, option)}
-                    required
-                  />
-                  {option}
-                </label>
-              ))}
-            </div>
+            <textarea
+              name={q.name}
+              value={responses[q.name] || ""}
+              onChange={(e) => handleChange(q.name, e.target.value)}
+              required
+            />
           </div>
         ))}
         <button className="btn" type="submit">Valider le test</button>
@@ -77,7 +107,6 @@ function Test() {
         </div>
       )}
       <hr />
-     
     </div>
   );
 }
