@@ -61,9 +61,18 @@ function Test() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Vider le cache si nécessaire
+    localStorage.removeItem("diagnostic");
+
+    // Créer le prompt pour Gemini
     const prompt = `
-      Un utilisateur a complété un test de coaching. Analyse ces réponses et donne un diagnostic clair :
+      Vous êtes un coach professionnel spécialisé dans le bien-être. Voici les réponses d'un utilisateur à un questionnaire sur son mode de vie et sa santé mentale. 
+      Analysez ces réponses et fournissez un diagnostic détaillé ainsi que des recommandations personnalisées. Utilisez un ton bienveillant et encourageant.
+
+      Réponses :
       ${Object.entries(responses).map(([key, value]) => `- ${key} : ${value || "non renseigné"}`).join("\n")}
+
+      Diagnostic et recommandations :
     `;
 
     try {
@@ -77,9 +86,18 @@ function Test() {
 
       setDiagnostic(res.data.response);
       localStorage.setItem("diagnostic", res.data.response);
+      console.log("Envoi de la requête à l'API...");
+      const res = await axios.post("http://localhost:5002/api/gemini/diagnostic", {
+        userId: "67b31f9ced85b56300b8ed98",
+        responses: responses,
+        prompt: prompt
+      });
+      console.log("Réponse reçue :", res.data);
+      setDiagnostic(res.data.diagnostic);
+      localStorage.setItem("diagnostic", res.data.diagnostic);
     } catch (err) {
-      console.error("Erreur API :", err);
-      alert("Erreur lors de l'obtention du diagnostic.");
+      console.error("Erreur API :", err.response ? err.response.data : err.message);
+      alert("Erreur lors de l'obtention du diagnostic. Veuillez réessayer plus tard.");
     }
   };
 

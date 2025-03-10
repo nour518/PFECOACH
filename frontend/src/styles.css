@@ -361,7 +361,6 @@ button:active {
 
 /* Footer */
 footer {
-  
   background-color: var(--primary-color);
   padding: 10px;
   margin-top: 30px;
@@ -369,10 +368,16 @@ footer {
   color: var(--background-color);
   text-align: center;
   border-radius: 8px;
+<<<<<<< HEAD
   position: relative;
   width:100%;
 margin: 30px auto 0;
 
+=======
+  width: 100%; /* Utilisation de toute la largeur */
+  position: relative;/* Empêche un footer trop large sur grands écrans */
+  margin: 30px auto 0; /* Centrage horizontal */
+>>>>>>> 65942e51ce1bcb1b02cc3e0281ba43c1b51f504b
 }
 
 footer a {
