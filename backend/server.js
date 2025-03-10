@@ -5,8 +5,9 @@ const cors = require("cors");
 
 const userRoutes = require("./routes/userRoutes");
 const geminiRoutes = require("./routes/geminiRoutes");
-console.log("Clé OpenAI/Gemini chargée ?", process.env.GEMINI_API_KEY ? "OUI" : "NON");
 
+console.log("Clé Gemini chargée ?", process.env.GEMINI_API_KEY ? "OUI" : "NON");
+console.log("Clé Gemini :", process.env.GEMINI_API_KEY);
 const app = express();
 app.use(express.json());
 app.use(cors());

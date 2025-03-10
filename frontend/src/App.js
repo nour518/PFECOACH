@@ -1,36 +1,47 @@
-import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Home from "./pages/Home";
-import Register from "./pages/Register";
-import Test from "./pages/Test";
-import Contact from "./pages/Contact"; // Nouvelle page Contact
-import Diagnostic from "./pages/Diagnostic"; 
-import PlanAction from "./components/PlanAction";
-import Navbar from "./components/Navbar"; // Ajout de la Navbar
-import Footer from "./components/Footer"; // Importation du Footer
-import Demo from "./pages/Demo";
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom"
+import Home from "./pages/Home"
+import Register from "./pages/Register"
+import Test from "./pages/Test"
+import Contact from "./pages/Contact"
+import Diagnostic from "./pages/Diagnostic"
+import PlanAction from "./components/PlanAction"
+import Navbar from "./components/Navbar"
+import Footer from "./components/Footer"
+import Demo from "./pages/Demo"
 
-// Importation du Footer
-import "./styles.css";
+import "./styles.css"
 
-function App() {
+// Composant Layout qui inclut Navbar et Footer
+function Layout() {
   return (
-    <Router>
-      <Navbar /> {/* Navbar pour naviguer */}
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/test" element={<Test />} />
-        <Route path="/contact" element={<Contact />} /> {/* Nouvelle route */}
-        <Route path="/diagnostic" element={<Diagnostic />} /> 
-        <Route path="/planaction" element={<PlanAction />} /> 
-        <Route path="/demo" element={<Demo/>} /> 
-       
-
-      </Routes>
+    <>
+      <Navbar />
+      <Outlet />
       <Footer />
-    </Router>
-  );
+    </>
+  )
 }
 
-export default App;
+function App() {
+  // Création du routeur avec la nouvelle API de React Router v7
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Layout />,
+      children: [
+        { index: true, element: <Home /> },
+        { path: "register", element: <Register /> },
+        { path: "test", element: <Test /> },
+        { path: "contact", element: <Contact /> },
+        { path: "diagnostic", element: <Diagnostic /> },
+        { path: "planaction", element: <PlanAction /> },
+        { path: "demo", element: <Demo /> },
+      ],
+    },
+  ])
+
+  return <RouterProvider router={router} />
+}
+
+export default App
+
