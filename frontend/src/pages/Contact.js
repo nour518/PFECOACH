@@ -1,59 +1,56 @@
-import React, { useState } from "react";
+import React from "react";
+import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import "../styles.css";
 
+// Style pour la carte
+const containerStyle = {
+  width: "100%",
+  height: "400px",
+  borderRadius: "10px",
+  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+};
 
-function Contact() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
+// Centre de la carte (exemple : Paris)
+const mapCenter = {
+  lat: 48.8566,
+  lng: 2.3522,
+};
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      // Simule un envoi (ici tu peux connecter à un backend)
-      console.log({ name, email, message });
-      alert("Message envoyé !");
-      setName("");
-      setEmail("");
-      setMessage("");
-    } catch (err) {
-      alert("Erreur lors de l'envoi");
-    }
-  };
-
+const Contact = () => {
   return (
-    <div className="container">
-      <h2>Contactez-nous</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          className="input"
-          type="text"
-          placeholder="Votre nom"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-        <input
-          className="input"
-          type="email"
-          placeholder="Votre email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <textarea
-          className="input textarea"
-          placeholder="Votre message"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          required
-        ></textarea>
-        <button className="btn" type="submit">
-          Envoyer
-        </button>
-      </form>
+    <div className="contact-container">
+      <div className="contact-header">
+        <h2>Contactez-nous</h2>
+      </div>
+
+      <div className="contact-details">
+        <div className="contact-info">
+          <h3>Nom de la Société</h3>
+          <p>coaches</p>
+
+          <h3>Adresse</h3>
+          <p>123 Rue de l'Entreprise, Gabés</p>
+        </div>
+
+        <div className="contact-info">
+          <h3>Téléphone</h3>
+          <p>+216 75.889.366</p>
+        </div>
+      </div>
+
+      <div className="contact-map">
+        <LoadScript googleMapsApiKey="IzaSyDZnTGKO04Ot0I8YJqDBK1dzlmvn8R9Iz">
+          <GoogleMap
+            mapContainerStyle={containerStyle}
+            center={mapCenter}
+            zoom={14}
+          >
+            <Marker position={mapCenter} />
+          </GoogleMap>
+        </LoadScript>
+      </div>
     </div>
   );
-}
+};
 
 export default Contact;

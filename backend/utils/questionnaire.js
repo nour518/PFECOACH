@@ -9,13 +9,19 @@ const rl = readline.createInterface({
 
 // Liste des questions
 const questions = [
-  { question: "Comment décririez-vous votre niveau de satisfaction actuel dans la vie ?", options: ["Très satisfait(e)", "Plutôt satisfait(e)", "Neutre", "Plutôt insatisfait(e)", "Très insatisfait(e)"], name: "satisfaction" },
-  { question: "Quel domaine de votre vie souhaiteriez-vous améliorer en priorité ?", options: ["Carrière", "Relations", "Santé", "Développement personnel", "Équilibre pro/perso"], name: "priority" },
-  { question: "Quel est votre plus grand défi actuel ?", options: ["Gérer mon temps", "Surmonter mes peurs", "Atteindre mes objectifs", "Améliorer mes relations", "Trouver un sens"], name: "challenge" },
-  { question: "Comment gérez-vous les obstacles ?", options: ["Je les évite", "Je me décourage", "J'apprends de mes erreurs", "Je demande de l’aide", "Je les vois comme une opportunité"], name: "obstacles" },
-  { question: "Quel est votre niveau d’énergie au quotidien ?", options: ["Élevé", "Moyen", "Faible", "Variable", "Je me sens perdu(e)"], name: "energy" },
+  { category: "Clarification de la Situation", questions: [
+    { question: "Qu'est-ce qui vous apporte aujourd'hui ?", name: "current_concern" },
+    { question: "Où êtes-vous actuellement ?", name: "current_location" },
+    { question: "Comment décririez-vous votre situation en ce moment ?", name: "current_situation" },
+    { question: "Qu'est-ce qui fonctionne bien dans votre vie actuellement ?", name: "positive_aspects" },
+    { question: "Qu'est-ce qui ne fonctionne pas comme vous le souhaitez ?", name: "negative_aspects" },
+    { question: "Quelles sont les trois choses que vous aimez vraiment dans votre vie ?", name: "three_likes" },
+    { question: "Que ressentez-vous quand vous pensez à cette situation ?", name: "feelings_about_situation" },
+    { question: "Qu'est-ce qui vous manque aujourd'hui pour vous sentir épanoui ?", name: "missing_elements" },
+    { question: "Sur quoi vous basez-vous pour dire cela ?", name: "basis_for_assessment" },
+    { question: "Quelle est votre plus grande préoccupation actuellement ?", name: "biggest_concern" }
+  ]}
 ];
-
 // Objet pour stocker les réponses
 const responses = {};
 
