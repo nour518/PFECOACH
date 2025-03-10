@@ -398,41 +398,60 @@ hr {
   background: #ddd;
   margin: 20px 0;
 }
-
-/* Questions et options */
-.question {
-  text-align: left;
-  margin: 20px 0;
-}
-
-/* Options des questions */
-.options {
+form {
   display: flex;
   flex-direction: column;
-  margin-top: 10px;
 }
 
-.options label {
-  background: var(--secondary-color);
-  padding: 12px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  transition: 0.3s;
+.category {
+  margin-bottom: 20px;
+}
+
+.question {
+  margin-bottom: 15px;
+}
+
+.question label {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.question input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.question input:focus {
+  outline: none;
+  border-color: #1d3c6a;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+button.btn {
+  padding: 10px 20px;
+  font-size: 1.1rem;
+  color: white;
+  background-color: #1d3c6a;
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
-  font-size: 14px;
+  transition: background-color 0.3s ease;
 }
 
-.options label:hover {
-  background: #e0e0e0;
+button.btn:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
 }
 
-.options input {
-  margin-right: 10px;
-  transform: scale(1.2);
-  accent-color: var(--accent-color);
+button.btn:hover:not(:disabled) {
+  background-color: #153b5d;
 }
-
 /* Styles généraux pour la section des témoignages */
 .testimonials {
   padding: 50px;
@@ -492,6 +511,20 @@ hr {
 .header p {
   font-size: 1.25rem;
   margin-bottom: 30px;
+}
+.btn {
+  background-color: #007bff; /* Couleur bleue */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+.btn:hover {
+  background-color: #0056b3; /* Changement de couleur au survol */
 }
 
 /* CTA Button */
@@ -711,6 +744,7 @@ input[type="checkbox"] {
   transform: scale(1.2);
   cursor: pointer;
 }
+<<<<<<< HEAD
 /* Styles spécifiques pour la page Signup */
 .signup-container {
   background: var(--background-color);
@@ -734,10 +768,25 @@ input[type="checkbox"] {
 .signup-description {
   font-size: 1.1rem;
   color: #6C757D; /* Couleur du texte */
+=======
+/* styles.css */
+
+.contact-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.contact-header {
+>>>>>>> 54362514233a3f74f1f1bb8c59774268ce6a0a4d
   text-align: center;
   margin-bottom: 30px;
 }
 
+<<<<<<< HEAD
 /* Styles pour le lien de connexion */
 .login-link {
   font-size: 1rem;
@@ -959,3 +1008,47 @@ input[type="checkbox"] {
   text-align: center;
   border: 1px solid #f5c6cb;
 }
+=======
+.contact-header h2 {
+  font-size: 2.5rem;
+  color: #131212;
+  font-weight: bold;
+}
+
+.contact-details {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40px;
+}
+
+.contact-info {
+  flex: 1;
+  margin: 0 20px;
+}
+
+.contact-info h3 {
+  font-size: 1.3rem;
+  color: var(--primary-color);
+  margin-bottom: 10px;
+}
+
+.contact-info p {
+  font-size: 1.1rem;
+  color: #555;
+}
+
+.contact-map {
+  margin-top: 30px;
+  border-radius: 10px;
+}
+
+.contact-info p {
+  font-size: 1.2rem;
+}
+
+.contact-map {
+  height: 400px;
+  width: 100%;
+}
+
+>>>>>>> 54362514233a3f74f1f1bb8c59774268ce6a0a4d
