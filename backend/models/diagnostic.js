@@ -22,7 +22,7 @@ const diagnosticSchema = new mongoose.Schema({
 });
 
 // Créer le modèle Diagnostic
-const Diagnostic = mongoose.model('Diagnostic', diagnosticSchema);
+const Diagnostic = mongoose.model('diagnostic', diagnosticSchema);
 
 // Exporter le modèle
 module.exports = Diagnostic;

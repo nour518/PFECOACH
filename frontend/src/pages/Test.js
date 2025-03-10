@@ -38,7 +38,7 @@ function Test() {
     try {
       console.log("Envoi de la requête à l'API...");
       const res = await axios.post("http://localhost:5002/api/gemini/diagnostic", {
-        userId: "12345", // Vous pouvez garder userId si nécessaire
+        userId: "67b31f9ced85b56300b8ed98",
         responses: responses,
         prompt: prompt
       });
