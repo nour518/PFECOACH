@@ -1,16 +1,16 @@
 const geminiService = require('../services/geminiService');
-const Diagnostic = require('./models/Diagnostic');
+const Diagnostic = require('../models/Diagnostic');
 
 const generateDiagnostic = async (req, res) => {
   try {
-    const { userId, responses, prompt } = req.body;
+    const { userId, responses, metadata } = req.body;
 
-    if (!userId || !responses || !prompt) {
-      return res.status(400).json({ error: 'L\'ID utilisateur, les réponses et le prompt sont requis.' });
+    if (!userId || !responses || !metadata) {
+      return res.status(400).json({ error: 'L\'ID utilisateur, les réponses et les métadonnées sont requis.' });
     }
 
     // Générer le diagnostic avec Gemini
-    const diagnostic = await geminiService.generateDiagnostic(responses, prompt);
+    const diagnostic = await geminiService.generateDiagnostic(responses, metadata);
 
     // Enregistrer le diagnostic dans la base de données
     const newDiagnostic = new Diagnostic({ userId, responses, diagnostic });

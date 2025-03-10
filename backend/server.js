@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 
 const userRoutes = require("./routes/userRoutes");
-const geminiRoutes = require("./routes/geminiRoutes"); // Importer les routes Gemini
+const geminiRoutes = require("./routes/geminiRoutes");
 
 console.log("Clé OpenAI chargée ?", process.env.OPENAI_API_KEY ? "OUI" : "NON");
 
@@ -23,7 +23,7 @@ mongoose
 app.use("/api/users", userRoutes);
 
 // Routes Gemini
-app.use("/api/gemini", geminiRoutes); // Intégrer les routes Gemini
+app.use("/api/gemini", geminiRoutes);
 
 const PORT = process.env.PORT || 5002;
 app.listen(PORT, () => console.log(`Serveur lancé sur le port ${PORT}`));

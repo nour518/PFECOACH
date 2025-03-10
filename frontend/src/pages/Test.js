@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-
 import axios from "axios";
 import "../styles.css";
 
 function Test() {
   const [responses, setResponses] = useState({});
   const [diagnostic, setDiagnostic] = useState("");
-
 
   const questions = [
     { question: "Comment décririez-vous votre niveau de satisfaction actuel dans la vie ?", options: ["Très satisfait(e)", "Plutôt satisfait(e)", "Neutre", "Plutôt insatisfait(e)", "Très insatisfait(e)"], name: "satisfaction" },
@@ -23,24 +21,33 @@ function Test() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Vider le cache si nécessaire
+    localStorage.removeItem("diagnostic");
+
+    // Créer le prompt pour Gemini
     const prompt = `
-      Un utilisateur a complété un test de coaching. Analyse ces réponses et donne un diagnostic clair :
+      Vous êtes un coach professionnel spécialisé dans le bien-être. Voici les réponses d'un utilisateur à un questionnaire sur son mode de vie et sa santé mentale. 
+      Analysez ces réponses et fournissez un diagnostic détaillé ainsi que des recommandations personnalisées. Utilisez un ton bienveillant et encourageant.
+
+      Réponses :
       ${Object.entries(responses).map(([key, value]) => `- ${key} : ${value || "non renseigné"}`).join("\n")}
+
+      Diagnostic et recommandations :
     `;
 
     try {
-      const cachedDiagnostic = localStorage.getItem("diagnostic");
-      if (cachedDiagnostic) {
-        setDiagnostic(cachedDiagnostic);
-        return;
-      }
-
-      const res = await axios.post("http://localhost:5002/api/openai/chat", { message: prompt });
-      setDiagnostic(res.data.response);
-      localStorage.setItem("diagnostic", res.data.response);
+      console.log("Envoi de la requête à l'API...");
+      const res = await axios.post("http://localhost:5002/api/gemini/diagnostic", {
+        userId: "12345", // Vous pouvez garder userId si nécessaire
+        responses: responses,
+        prompt: prompt
+      });
+      console.log("Réponse reçue :", res.data);
+      setDiagnostic(res.data.diagnostic);
+      localStorage.setItem("diagnostic", res.data.diagnostic);
     } catch (err) {
-      console.error("Erreur API :", err);
-      alert("Erreur lors de l'obtention du diagnostic.");
+      console.error("Erreur API :", err.response ? err.response.data : err.message);
+      alert("Erreur lors de l'obtention du diagnostic. Veuillez réessayer plus tard.");
     }
   };
 
@@ -77,7 +84,6 @@ function Test() {
         </div>
       )}
       <hr />
-     
     </div>
   );
 }
