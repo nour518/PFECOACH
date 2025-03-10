@@ -1,6 +1,5 @@
 require('dotenv').config();
 const axios = require('axios');
-const API_KEY = process.env.API_KEY; // Charger la clé API depuis .env
 // Charger la clé API depuis .env
 const API_KEY = process.env.GEMINI_API_KEY;
 const BASE_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
