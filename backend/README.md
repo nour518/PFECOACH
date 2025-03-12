@@ -1,0 +1,1 @@
+Set-Content -Path "README.md" -Value "# 🏆 Backend - Plateforme de Coaching de Vie`n`nCe projet est le backend d'une plateforme de coaching de vie, développé avec **Node.js**, **Express.js** et **MongoDB**.`n`n## 🚀 Installation`n1. **Cloner le projet** :`n   ```sh`n   git clone https://github.com/ton-profil/ton-repo.git`n   ```"
