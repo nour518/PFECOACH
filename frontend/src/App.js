@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom"
+import { createBrowserRouter, RouterProvider, Outlet, Navigate } from "react-router-dom"
 
 import Home from "./pages/Home"
 import Register from "./pages/Register"
@@ -8,8 +8,8 @@ import Contact from "./pages/Contact"
 import Diagnostic from "./pages/Diagnostic"
 import Demo from "./pages/Demo"
 import Signup from "./pages/Signup"
-import Login from "./pages/Login"
-import CoachDashboard from "./pages/CoachDashboard"
+import Login from './pages/Login'
+import UserDashboard from './pages/UserDashboard'
 import PlanAction from "./components/PlanAction"
 import Navbar from "./components/Navbar"
 import Footer from "./components/Footer"
@@ -27,8 +27,19 @@ function Layout() {
   )
 }
 
+// Composant pour protéger les routes qui nécessitent une authentification
+function ProtectedRoute({ children }) {
+  const isAuthenticated = localStorage.getItem('user') !== null
+  
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />
+  }
+  
+  return children
+}
+
 function App() {
-  // Création du routeur avec la nouvelle API de React Router v7
+  // Création du routeur avec la nouvelle API de React Router
   const router = createBrowserRouter([
     {
       path: "/",
@@ -44,7 +55,10 @@ function App() {
         { path: "demo", element: <Demo /> },
         { path: "signup", element: <Signup /> },
         { path: "login", element: <Login /> },
-        { path: "coach-dashboard", element: <CoachDashboard /> },
+        { 
+          path: "dashboard", 
+          element: <ProtectedRoute><UserDashboard /></ProtectedRoute> 
+        },
       ],
     },
   ])
@@ -53,4 +67,3 @@ function App() {
 }
 
 export default App
-

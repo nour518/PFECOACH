@@ -3,7 +3,7 @@ const router = express.Router()
 const { protect } = require("../middleware/authMiddleware")
 const { isCoach } = require("../middleware/roleMiddleware")
 const { getAllUsers } = require("../controllers/userController")
-const Diagnostic = require("../models/diagnostic")
+const Diagnostic = require("../models/Diagnostic") // Ajout de l'import manquant
 
 // Route pour récupérer tous les utilisateurs (pour les coaches)
 router.get("/users", protect, isCoach, getAllUsers)

@@ -1,64 +1,58 @@
-require("dotenv").config()
-const express = require("express")
-const mongoose = require("mongoose")
-const cors = require("cors")
+require('dotenv').config();
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const { createServer } = require('http');
 
-const userRoutes = require("./routes/userRoutes")
-const geminiRoutes = require("./routes/geminiRoutes")
-const coachRoutes = require("./routes/coachRoutes") // Ajout des routes coach
+const app = express();
+const httpServer = createServer(app);
 
-console.log("Clé Gemini chargée ?", process.env.GEMINI_API_KEY ? "OUI" : "NON")
-console.log("MONGO_URI :", process.env.MONGO_URI)
+// Middleware CORS
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  credentials: true
+}));
 
-const app = express()
-app.use(express.json())
-app.use(cors())
+app.use(express.json());
 
-// Connexion à MongoDB
-mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("✅ MongoDB connecté avec succès"))
-  .catch((err) => {
-    console.error("❌ Erreur de connexion MongoDB :", err)
-    process.exit(1) // Arrête le serveur si la connexion échoue
-  })
-
-// Routes utilisateur
-app.use("/api/users", userRoutes)
-
-// Routes Gemini
-app.use("/api/gemini", geminiRoutes)
-
-// Routes Coach
-app.use("/api/coach", coachRoutes)
-
-// Middleware pour les erreurs 404
-app.use((req, res) => {
-  res.status(404).json({ message: "Route non trouvée" })
+// Connexion MongoDB unifiée
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/coachingdb', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
 })
+.then(() => console.log('✅ Connecté à MongoDB'))
+.catch(err => console.error('❌ Erreur MongoDB:', err));
 
-// Middleware pour les erreurs globales
+// Routes
+app.use('/api/users', require('./routes/userRoutes'));
+app.use('/api/diagnostics', require('./middleware/authMiddleware').protect, require('./routes/diagnosticRoutes'));
+app.use('/api/messages', require('./middleware/authMiddleware').protect, require('./routes/messageRoutes'));
+app.use('/api/plan-actions', require('./middleware/authMiddleware').protect, require('./routes/planActionRoutes'));
+
+// Route de test
+app.get('/api/health-check', (req, res) => {
+  res.status(200).json({
+    status: 'success',
+    message: 'API fonctionnelle',
+    database: mongoose.connection.readyState === 1 ? 'connecté' : 'déconnecté'
+  });
+});
+
+// Gestion des erreurs centralisée
 app.use((err, req, res, next) => {
-  console.error("❌ Erreur :", err)
-  res.status(500).json({ message: "Erreur interne du serveur" })
-})
+  err.statusCode = err.statusCode || 500;
+  err.status = err.status || 'error';
 
-const PORT = process.env.PORT || 5002
-const server = app.listen(PORT, () => console.log(`🚀 Serveur lancé sur le port ${PORT}`))
+  console.error('Erreur:', err.stack);
 
-// Gérer les erreurs non capturées
-process.on("uncaughtException", (err) => {
-  console.error("❌ Erreur non capturée :", err)
-})
+  res.status(err.statusCode).json({
+    status: err.status,
+    message: err.message,
+    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+  });
+});
 
-// Fermer proprement MongoDB lors de l'arrêt du serveur
-process.on("SIGINT", async () => {
-  console.log("🛑 Fermeture du serveur...")
-  await mongoose.connection.close()
-  console.log("🔌 Déconnexion de MongoDB")
-  process.exit(0)
-})
-
+const PORT = process.env.PORT || 5002;
+httpServer.listen(PORT, () => {
+  console.log(`🚀 Serveur en cours d'exécution sur le port ${PORT}`);
+});

@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const { register, login } = require('../controllers/userController'); // Importez les deux fonctions
+const userController = require('../controllers/userController');
+const authMiddleware = require('../middleware/authMiddleware');
 
-// Route pour l'inscription
-router.post('/signup', register);
+// Routes publiques
+router.post('/signup', userController.signup);
+router.post('/login', userController.login);
 
-// Route pour la connexion
-router.post('/login', login);
+// Routes protégées
+router.get('/me', authMiddleware.protect, userController.getProfile);
 
 module.exports = router;

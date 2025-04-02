@@ -1,35 +1,18 @@
 "use client"
-// Importez Link depuis react-router-dom v7
+
 import { Link, useNavigate } from "react-router-dom"
-// Pour HashLink, nous allons utiliser une approche différente
+import { useEffect, useState } from "react"
 import "../styles.css"
-import { useState, useEffect } from "react"
 
 function Navbar() {
   const navigate = useNavigate()
   const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [isCoach, setIsCoach] = useState(false)
 
-  // Vérifier si l'utilisateur est connecté au chargement du composant
+  // Vérifier si l'utilisateur est connecté
   useEffect(() => {
-    const token = localStorage.getItem("token")
-    const user = JSON.parse(localStorage.getItem("user"))
-
-    if (token && user) {
-      setIsLoggedIn(true)
-      // Vérifier si c'est le coach spécial ou un coach normal
-      setIsCoach(user.role === "coach" || user.email === "sadek21@gmail.com")
-    }
+    const user = localStorage.getItem("user")
+    setIsLoggedIn(!!user)
   }, [])
-
-  // Fonction pour se déconnecter
-  const handleLogout = () => {
-    localStorage.removeItem("token")
-    localStorage.removeItem("user")
-    setIsLoggedIn(false)
-    setIsCoach(false)
-    navigate("/")
-  }
 
   // Fonction pour faire défiler vers une section
   const scrollToSection = (id) => {
@@ -37,6 +20,14 @@ function Navbar() {
     if (element) {
       element.scrollIntoView({ behavior: "smooth" })
     }
+  }
+
+  // Fonction de déconnexion
+  const handleLogout = () => {
+    localStorage.removeItem("user")
+    localStorage.removeItem("token")
+    setIsLoggedIn(false)
+    navigate("/")
   }
 
   return (
@@ -57,7 +48,6 @@ function Navbar() {
             Diagnostic
           </Link>
         </li>
-
         {/* Remplacez HashLink par un Link avec onClick */}
         <li>
           <Link
@@ -79,15 +69,13 @@ function Navbar() {
 
         {isLoggedIn ? (
           <>
-            {isCoach && (
-              <li>
-                <Link to="/coach-dashboard" className="navbar-link">
-                  Dashboard Coach
-                </Link>
-              </li>
-            )}
             <li>
-              <button onClick={handleLogout} className="logout-button">
+              <Link to="/dashboard" className="navbar-link">
+                Tableau de bord
+              </Link>
+            </li>
+            <li>
+              <button onClick={handleLogout} className="navbar-link logout-link">
                 Déconnexion
               </button>
             </li>
