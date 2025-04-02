@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom'; // Importez Link pour la navigation
+import { Link, useNavigate } from 'react-router-dom'; // Importez useNavigate
 import "../styles.css";
 
 const Signup = () => {
@@ -9,12 +9,19 @@ const Signup = () => {
     password: '',
   });
 
+  const [errorMessage, setErrorMessage] = useState('');  // Message d'erreur
+  const [successMessage, setSuccessMessage] = useState(''); // Message de succès
+  
+  const navigate = useNavigate(); // Utilisation de useNavigate pour la redirection
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage(''); // Réinitialiser les messages d'erreur à chaque soumission
+    setSuccessMessage(''); // Réinitialiser le message de succès
 
     try {
       const response = await fetch('http://localhost:5002/api/users/signup', {
@@ -28,13 +35,16 @@ const Signup = () => {
       const data = await response.json();
 
       if (response.ok) {
-        alert(data.message); // Affichez un message de succès
+        setSuccessMessage(data.message || "Inscription réussie !");
+        setTimeout(() => {
+          navigate('/login');  // Redirection vers la page de connexion après succès
+        }, 2000);
       } else {
-        alert(data.message || "Erreur lors de l'inscription");
+        setErrorMessage(data.message || "Erreur lors de l'inscription");
       }
     } catch (error) {
       console.error('Erreur :', error);
-      alert("Erreur lors de l'inscription");
+      setErrorMessage("Erreur lors de l'inscription");
     }
   };
 
@@ -42,6 +52,10 @@ const Signup = () => {
     <div className="signup-container">
       <h1>Créer un compte</h1> {/* Titre principal */}
       <p className="signup-description">Entrez vos informations pour créer votre compte</p> {/* Description */}
+
+      {errorMessage && <div className="error-message">{errorMessage}</div>} {/* Affichage des erreurs */}
+      {successMessage && <div className="success-message">{successMessage}</div>} {/* Affichage du succès */}
+
       <form onSubmit={handleSubmit} className="signup-form">
         <div className="form-group">
           <label>Nom :</label>

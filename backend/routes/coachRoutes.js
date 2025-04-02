@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // routes/coachRoutes.js
 const express = require('express');
 const router = express.Router();
@@ -9,6 +10,14 @@ const {
   updateCoach,
   deleteCoach,
 } = require('../controllers/coachController');
+=======
+const express = require("express")
+const router = express.Router()
+const { protect } = require("../middleware/authMiddleware")
+const { isCoach } = require("../middleware/roleMiddleware")
+const { getAllUsers } = require("../controllers/userController")
+const Diagnostic = require("../models/Diagnostic") // Ajout de l'import manquant
+>>>>>>> 873df53fabf76eacd26c160c16e45582903d1b80
 
 // Route pour ajouter un coach
 router.post('/', protect, isCoach, addCoach);

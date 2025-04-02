@@ -5,9 +5,11 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import "../styles.css";
 
 const Login = () => {
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({
     email: "",
     password: "",
+<<<<<<< HEAD
   });
   const [error, setError] = useState(""); // État pour les messages d'erreur
   const [success, setSuccess] = useState(""); // État pour les messages de succès
@@ -20,12 +22,19 @@ const Login = () => {
     const searchParams = new URLSearchParams(location.search);
     return searchParams.get("redirect") || "/";
   };
+=======
+  })
+  const [error, setError] = useState("")
+  const [success, setSuccess] = useState("")
+  const [loading, setLoading] = useState(false)
+>>>>>>> 873df53fabf76eacd26c160c16e45582903d1b80
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
+<<<<<<< HEAD
     e.preventDefault();
     setError(""); // Réinitialiser les messages d'erreur
     setSuccess(""); // Réinitialiser les messages de succès
@@ -61,6 +70,12 @@ const Login = () => {
       }
       return;
     }
+=======
+    e.preventDefault()
+    setError("")
+    setSuccess("")
+    setLoading(true)
+>>>>>>> 873df53fabf76eacd26c160c16e45582903d1b80
 
     try {
       const response = await fetch("http://localhost:5002/api/users/login", {
@@ -75,6 +90,7 @@ const Login = () => {
       const data = await response.json(); 
 
       if (response.ok) {
+<<<<<<< HEAD
         setSuccess(data.message); // Affichez un message de succès
 
         // Ajouter un abonnement fictif pour la démo
@@ -98,15 +114,37 @@ const Login = () => {
           navigate("/coach-dashboard");
         } else {
           navigate(redirectPath);
+=======
+        setSuccess(data.message)
+
+        // Stocker les informations de l'utilisateur et le token dans localStorage
+        const userData = {
+          ...data.user,
+          token: data.token,
+>>>>>>> 873df53fabf76eacd26c160c16e45582903d1b80
         }
+        localStorage.setItem("user", JSON.stringify(userData))
+
+        // Rediriger vers le tableau de bord après une courte pause
+        setTimeout(() => {
+          navigate("/dashboard")
+        }, 1000)
       } else {
+<<<<<<< HEAD
         setError(data.message); // Affichez un message d'erreur
+=======
+        setError(data.message)
+>>>>>>> 873df53fabf76eacd26c160c16e45582903d1b80
       }
     } catch (error) {
       console.error("Erreur :", error);
       setError("Une erreur s'est produite. Veuillez réessayer plus tard.");
     } finally {
+<<<<<<< HEAD
       setIsLoading(false);
+=======
+      setLoading(false)
+>>>>>>> 873df53fabf76eacd26c160c16e45582903d1b80
     }
   };
 
@@ -115,10 +153,7 @@ const Login = () => {
       <h1>Connexion</h1>
       <p className="login-description">Entrez vos identifiants pour vous connecter</p>
 
-      {/* Afficher le message de succès */}
       {success && <div className="success-message">{success}</div>}
-
-      {/* Afficher le message d'erreur */}
       {error && <div className="error-message">{error}</div>}
 
       <form onSubmit={handleSubmit} className="login-form">
@@ -142,8 +177,8 @@ const Login = () => {
             required
           />
         </div>
-        <button type="submit" disabled={isLoading}>
-          {isLoading ? "Connexion en cours..." : "Se connecter"}
+        <button type="submit" disabled={loading}>
+          {loading ? "Connexion en cours..." : "Se connecter"}
         </button>
       </form>
       <p className="forgot-password">
