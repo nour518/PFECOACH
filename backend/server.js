@@ -1,64 +1,86 @@
-require("dotenv").config()
-const express = require("express")
-const mongoose = require("mongoose")
-const cors = require("cors")
+const express = require("express");
+const cors = require("cors");
+const dotenv = require("dotenv");
+const mongoose = require("mongoose");
+const { GoogleGenerativeAI } = require("@google/generative-ai"); // Importer Gemini AI
+const userRoutes = require("./routes/userRoutes"); // Assurez-vous que le chemin est correct
 
-const userRoutes = require("./routes/userRoutes")
-const geminiRoutes = require("./routes/geminiRoutes")
-const coachRoutes = require("./routes/coachRoutes") // Ajout des routes coach
+// Configuration de l'environnement
+dotenv.config();
 
-console.log("Clé Gemini chargée ?", process.env.GEMINI_API_KEY ? "OUI" : "NON")
-console.log("MONGO_URI :", process.env.MONGO_URI)
+const app = express();
+app.use(cors());
+app.use(express.json());
 
-const app = express()
-app.use(express.json())
-app.use(cors())
+// Vérification de la clé API
+if (!process.env.GEMINI_API_KEY) {
+  console.error("❌ Erreur : Clé API GEMINI_API_KEY manquante dans le fichier .env !");
+  process.exit(1); // Arrête le serveur si la clé API est manquante
+}
+
+// Vérification de la variable d'environnement MongoDB URI
+if (!process.env.MONGODB_URI) {
+  console.error("❌ Erreur : MONGODB_URI manquante dans le fichier .env !");
+  process.exit(1); // Arrête le serveur si l'URI MongoDB est manquante
+}
 
 // Connexion à MongoDB
-mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("✅ MongoDB connecté avec succès"))
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log("Connexion à MongoDB réussie !"))
   .catch((err) => {
-    console.error("❌ Erreur de connexion MongoDB :", err)
-    process.exit(1) // Arrête le serveur si la connexion échoue
-  })
+    console.error("Erreur de connexion à MongoDB :", err);
+    process.exit(1); // Arrête le serveur si la connexion échoue
+  });
 
-// Routes utilisateur
-app.use("/api/users", userRoutes)
+// Initialisation de Gemini AI avec la clé API
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// Routes Gemini
-app.use("/api/gemini", geminiRoutes)
+// Route pour traiter le test et générer un diagnostic
+app.post("/api/gemini/diagnostic", async (req, res) => {
+  const { userId, responses } = req.body;
 
-// Routes Coach
-app.use("/api/coach", coachRoutes)
+  if (!responses) {
+    return res.status(400).json({ success: false, message: "Réponses manquantes." });
+  }
 
-// Middleware pour les erreurs 404
-app.use((req, res) => {
-  res.status(404).json({ message: "Route non trouvée" })
-})
+  const prompt = `
+    Vous êtes un coach de vie professionnel. Voici les réponses d'un utilisateur à un test d'évaluation. 
+    Analysez-les et fournissez un diagnostic personnalisé avec des conseils adaptés :
 
-// Middleware pour les erreurs globales
-app.use((err, req, res, next) => {
-  console.error("❌ Erreur :", err)
-  res.status(500).json({ message: "Erreur interne du serveur" })
-})
+    Réponses de l'utilisateur :
+    ${Object.entries(responses).map(([key, value]) => `- ${key} : ${value || "non renseigné"}`).join("\n")}
 
-const PORT = process.env.PORT || 5002
-const server = app.listen(PORT, () => console.log(`🚀 Serveur lancé sur le port ${PORT}`))
+    Diagnostic et recommandations :
+  `;
 
-// Gérer les erreurs non capturées
-process.on("uncaughtException", (err) => {
-  console.error("❌ Erreur non capturée :", err)
-})
+  try {
+    // Vérifie si le modèle est bien supporté
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+    const result = await model.generateContent(prompt);
+    
+    // Récupération correcte du texte généré
+    const diagnostic = result.response.text();
 
-// Fermer proprement MongoDB lors de l'arrêt du serveur
-process.on("SIGINT", async () => {
-  console.log("🛑 Fermeture du serveur...")
-  await mongoose.connection.close()
-  console.log("🔌 Déconnexion de MongoDB")
-  process.exit(0)
-})
+    res.json({ success: true, diagnostic });
+  } catch (error) {
+    console.error("Erreur avec Gemini :", error);
+    res.status(500).json({ success: false, message: "Erreur lors de l'analyse avec Gemini." });
+  }
+});
 
+// Route pour afficher la liste des modèles disponibles
+app.get("/api/gemini/models", async (req, res) => {
+  try {
+    const models = await genAI.listModels();
+    res.json(models);
+  } catch (error) {
+    console.error("Erreur lors de la récupération des modèles :", error);
+    res.status(500).json({ error: "Impossible d'obtenir la liste des modèles." });
+  }
+});
+
+// Utilisation des routes utilisateurs
+app.use("/api/users", userRoutes); // Ajout de la route d'inscription et de connexion
+
+const PORT = process.env.PORT || 5002;
+app.listen(PORT, () => console.log(`🚀 Serveur lancé sur http://localhost:${PORT}`));

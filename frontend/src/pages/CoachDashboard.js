@@ -246,4 +246,3 @@ const CoachDashboard = () => {
 }
 
 export default CoachDashboard
-

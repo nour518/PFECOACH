@@ -1,28 +1,38 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose")
 
-// Définir le schéma du diagnostic
-const diagnosticSchema = new mongoose.Schema({
-  userId: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'User', // Référence à un modèle User (si vous en avez un)
-    required: true 
+const DiagnosticSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
   },
-  responses: { 
-    type: Object, // Stocker les réponses de l'utilisateur sous forme d'objet
-    required: true 
+  diagnostic: {
+    type: String,
+    required: true,
   },
-  diagnostic: { 
-    type: String, // Stocker le diagnostic généré par Gemini
-    required: true 
+  responses: {
+    type: Object,
+    required: true,
   },
-  date: { 
-    type: Date, 
-    default: Date.now // Date de création du diagnostic
-  }
-});
+  status: {
+    type: String,
+    enum: ["pending", "approved", "modified"],
+    default: "pending",
+  },
+  reviewedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
+  comments: {
+    type: String,
+  },
+  originalDiagnostic: {
+    type: String,
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+})
 
-// Créer le modèle Diagnostic
-const Diagnostic = mongoose.model('diagnostic', diagnosticSchema);
-
-// Exporter le modèle
-module.exports = Diagnostic;
+module.exports = mongoose.model("Diagnostic", DiagnosticSchema)

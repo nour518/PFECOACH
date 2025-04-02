@@ -1,33 +1,28 @@
-const express = require("express")
-const router = express.Router()
-const { protect } = require("../middleware/authMiddleware")
-const { isCoach } = require("../middleware/roleMiddleware")
-const { getAllUsers } = require("../controllers/userController")
-const Diagnostic = require("../models/diagnostic")
+// routes/coachRoutes.js
+const express = require('express');
+const router = express.Router();
+const { protect, isCoach } = require('../middleware/authMiddleware');  // Si vous avez besoin de middleware pour l'authentification
+const {
+  addCoach,
+  getAllCoaches,
+  getCoachById,
+  updateCoach,
+  deleteCoach,
+} = require('../controllers/coachController');
 
-// Route pour récupérer tous les utilisateurs (pour les coaches)
-router.get("/users", protect, isCoach, getAllUsers)
+// Route pour ajouter un coach
+router.post('/', protect, isCoach, addCoach);
 
-// Route pour récupérer tous les diagnostics (pour les coaches)
-router.get("/diagnostics", protect, isCoach, async (req, res) => {
-  try {
-    const diagnostics = await Diagnostic.find().populate("userId", "name email")
-    res.status(200).json(diagnostics)
-  } catch (error) {
-    res.status(500).json({ message: "Erreur lors de la récupération des diagnostics", error: error.message })
-  }
-})
+// Route pour récupérer tous les coachs
+router.get('/', protect, isCoach, getAllCoaches);
 
-// Route pour récupérer les diagnostics d'un utilisateur spécifique
-router.get("/diagnostics/:userId", protect, isCoach, async (req, res) => {
-  try {
-    const { userId } = req.params
-    const diagnostics = await Diagnostic.find({ userId }).populate("userId", "name email")
-    res.status(200).json(diagnostics)
-  } catch (error) {
-    res.status(500).json({ message: "Erreur lors de la récupération des diagnostics", error: error.message })
-  }
-})
+// Route pour récupérer un coach par ID
+router.get('/:id', protect, isCoach, getCoachById);
 
-module.exports = router
+// Route pour mettre à jour un coach
+router.put('/:id', protect, isCoach, updateCoach);
 
+// Route pour supprimer un coach
+router.delete('/:id', protect, isCoach, deleteCoach);
+
+module.exports = router;
