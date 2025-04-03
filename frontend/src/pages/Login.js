@@ -9,13 +9,12 @@ const Login = () => {
     email: "",
     password: "",
   });
-  const [error, setError] = useState(""); // État pour les messages d'erreur
-  const [success, setSuccess] = useState(""); // État pour les messages de succès
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation(); // Ajouter cette ligne pour accéder aux paramètres d'URL
+  const location = useLocation();
 
-  // Fonction pour obtenir les paramètres d'URL
   const getRedirectPath = () => {
     const searchParams = new URLSearchParams(location.search);
     return searchParams.get("redirect") || "/";
@@ -25,16 +24,35 @@ const Login = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+<<<<<<< HEAD
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(""); // Réinitialiser les messages d'erreur
     setSuccess(""); // Réinitialiser les messages de succès
     setIsLoading(true);
+=======
+ // Dans votre composant Login.js
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  
+  try {
+    const response = await fetch('http://localhost:5002/api/users/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        passwordConfirm: formData.passwordConfirm // Ajoutez cette ligne si votre backend la demande
+      }),
+    });
+>>>>>>> 6794824 (Ajout du code)
 
-    // Vérification spécifique pour le compte coach
-    if (formData.email === "sadek21@gmail.com" && formData.password === "123456") {
-      setSuccess("Connexion réussie en tant que coach !");
+    const data = await response.json();
 
+<<<<<<< HEAD
       // Créer un objet utilisateur coach avec abonnement
       const coachUser = {
         id: "coach123",
@@ -111,6 +129,20 @@ const Login = () => {
       setIsLoading(false);
     }
   };
+=======
+    if (!response.ok) {
+      throw new Error(data.message || 'Erreur lors de l\'inscription');
+    }
+
+    console.log('Inscription réussie:', data);
+    // Redirection ou traitement du succès ici
+    
+  } catch (error) {
+    console.error('Erreur complète:', error);
+    setError(error.message || 'Erreur technique lors de l\'inscription');
+  }
+};
+(Ajout du code)
 
   return (
     <div className="login-container">
@@ -132,6 +164,7 @@ const Login = () => {
             value={formData.email}
             onChange={handleChange}
             required
+            autoComplete="username"
           />
         </div>
         <div className="form-group">
@@ -142,6 +175,7 @@ const Login = () => {
             value={formData.password}
             onChange={handleChange}
             required
+            autoComplete="current-password"
           />
         </div>
         <button type="submit" disabled={isLoading}>

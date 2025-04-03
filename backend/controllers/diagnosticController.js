@@ -1,7 +1,11 @@
 const axios = require("axios");
 const mongoose = require("mongoose");
 const User = require("../models/User"); // Pour récupérer l'utilisateur, si nécessaire
+<<<<<<< HEAD
 const Diagnostic = require("../models/Diagnostic"); // Correcte casse avec PascalCase
+=======
+const diagnostic = require("../models/diagnostic");
+>>>>>>> 6794824 (Ajout du code)
 
 // Fonction pour obtenir un diagnostic de test à partir de Gemini
 const getGeminiDiagnostic = async (req, res) => {
@@ -133,4 +137,8 @@ module.exports = {
   getGeminiDiagnostic,
   getDiagnostic,
   createDiagnostic,
+<<<<<<< HEAD
 };
+=======
+};
+>>>>>>> 6794824 (Ajout du code)

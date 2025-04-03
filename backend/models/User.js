@@ -1,16 +1,22 @@
 const mongoose = require("mongoose");
+<<<<<<< HEAD
 const bcrypt = require("bcryptjs");
 const validator = require("validator");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
 // Définition du schéma utilisateur
+=======
+const validator = require("validator");
+
+>>>>>>> 6794824 (Ajout du code)
 const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: [true, "Le nom est requis"],
       trim: true,
+<<<<<<< HEAD
       maxlength: [50, "Le nom ne peut pas dépasser 50 caractères"],
       validate: {
         validator: function (v) {
@@ -18,6 +24,9 @@ const userSchema = new mongoose.Schema(
         },
         message: "Le nom ne doit contenir que des lettres et espaces",
       },
+=======
+      maxlength: [50, "Le nom ne peut pas dépasser 50 caractères"]
+>>>>>>> 6794824 (Ajout du code)
     },
     email: {
       type: String,
@@ -25,12 +34,20 @@ const userSchema = new mongoose.Schema(
       unique: true,
       lowercase: true,
       trim: true,
+<<<<<<< HEAD
       validate: [validator.isEmail, "Veuillez fournir un email valide"],
       index: true,
+=======
+      validate: {
+        validator: validator.isEmail,
+        message: "Veuillez fournir un email valide"
+      }
+>>>>>>> 6794824 (Ajout du code)
     },
     password: {
       type: String,
       required: [true, "Mot de passe requis"],
+<<<<<<< HEAD
       minlength: [8, "Le mot de passe doit contenir au moins 8 caractères"],
       select: false,
       validate: {
@@ -149,10 +166,62 @@ userSchema.methods.generateAuthToken = function () {
     {
       expiresIn: process.env.JWT_EXPIRES_IN || "1d",
       issuer: process.env.JWT_ISSUER || "your-app-name",
+=======
+      minlength: [4, "Le mot de passe doit contenir au moins 4 caractères"],
+      select: false
+    },
+    role: {
+      type: String,
+      enum: ["user", "coach", "admin"],
+      default: "user"
+    },
+    coach: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      validate: {
+        validator: async function(v) {
+          if (!v) return true;
+          const coach = await mongoose.model("User").findById(v);
+          return coach && coach.role === "coach";
+        },
+        message: "Le coach référencé doit exister et avoir le rôle coach"
+      }
+    },
+    isVerified: {
+      type: Boolean,
+      default: false
+    },
+    lastLogin: {
+      type: Date
+    },
+    passwordChangedAt: Date,
+    active: {
+      type: Boolean,
+      default: true,
+      select: false
+>>>>>>> 6794824 (Ajout du code)
     }
-  );
-};
+  },
+  {
+    timestamps: true,
+    toJSON: {
+      transform: function(doc, ret) {
+        delete ret.password;
+        delete ret.__v;
+        return ret;
+      }
+    },
+    toObject: {
+      transform: function(doc, ret) {
+        delete ret.password;
+        delete ret.__v;
+        return ret;
+      }
+    }
+  }
+);
 
+<<<<<<< HEAD
 // Méthode pour générer un token de réinitialisation de mot de passe
 userSchema.methods.createPasswordResetToken = function () {
   const resetToken = crypto.randomBytes(32).toString("hex");
@@ -170,3 +239,8 @@ userSchema.virtual("fullName").get(function () {
 });
 
 module.exports = mongoose.model("User", userSchema);
+=======
+const User = mongoose.model("User", userSchema);
+
+module.exports = User;
+>>>>>>> 6794824 (Ajout du code)

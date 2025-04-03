@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const validator = require("validator");
@@ -5,6 +6,10 @@ const User = require("../models/User");
 const authMiddleware = require("../middleware/authMiddleware");
 
 const router = express.Router();
+=======
+const jwt = require("jsonwebtoken");
+const User = require("../models/User");
+>>>>>>> 6794824 (Ajout du code)
 
 // Fonction pour créer un objet erreur standardisé
 const createError = (message, statusCode) => {
@@ -14,6 +19,7 @@ const createError = (message, statusCode) => {
   return error;
 };
 
+<<<<<<< HEAD
 // ✅ Inscription
 router.post("/signup", async (req, res, next) => {
   try {
@@ -112,15 +118,145 @@ router.post("/login", async (req, res, next) => {
   } catch (err) {
     console.error("❌ Erreur lors de la connexion :", err);
     next(createError("Une erreur est survenue lors de la connexion", 500));
+=======
+// ✅ Inscription (Signup)
+
+exports.signup = async (req, res) => {
+  try {
+    console.log('Données reçues:', req.body);
+    
+    const { name, email, password } = req.body;
+
+    // Validation basique
+    if (!name || !email || !password) {
+      console.log('Champs manquants');
+      return res.status(400).json({ 
+        success: false, 
+        message: "Tous les champs sont requis" 
+      });
+    }
+
+    // Vérification email existant
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      console.log('Email déjà utilisé');
+      return res.status(400).json({ 
+        success: false, 
+        message: "Cet email est déjà utilisé" 
+      });
+    }
+
+    // Création utilisateur
+    console.log('Création nouvel utilisateur');
+    const user = await User.create({
+      name,
+      email,
+      password // Stockage direct (non haché pour simplifier)
+    });
+
+    console.log('Utilisateur créé avec succès:', user._id);
+    
+    res.status(201).json({
+      success: true,
+      message: "Inscription réussie",
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email
+      }
+    });
+
+  } catch (error) {
+    console.error('ERREUR COMPLÈTE:', error);
+    res.status(500).json({
+      success: false,
+      message: "Erreur technique lors de l'inscription",
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+>>>>>>> 6794824 (Ajout du code)
   }
 });
 
+<<<<<<< HEAD
 // ✅ Profil utilisateur
 router.get("/me", authMiddleware.protect, async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id).populate("coach", "name email");
     if (!user) {
       return next(createError("Utilisateur non trouvé", 404));
+=======
+// ✅ Connexion (Login)
+exports.login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // 1. Validation des entrées
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Email et mot de passe requis"
+      });
+    }
+
+    // 2. Recherche de l'utilisateur
+    const user = await User.findOne({ email });
+    if (!user || user.password !== password) {  // Comparaison directe du mot de passe
+      return res.status(401).json({
+        success: false,
+        message: "Identifiants incorrects"
+      });
+    }
+
+    // 3. Vérification de la configuration JWT
+    if (!process.env.JWT_SECRET) {
+      throw new Error("Configuration JWT manquante");
+    }
+
+    // 4. Génération du token
+    const token = jwt.sign(
+      { id: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRES_IN || '1d' }
+    );
+
+    // 5. Préparation de la réponse
+    const userData = user.toObject();
+    delete userData.password; // Supprime le mot de passe avant de l'envoyer
+
+    res.status(200).json({
+      success: true,
+      token,
+      user: userData
+    });
+
+  } catch (error) {
+    console.error("Erreur de connexion:", error);
+    res.status(500).json({
+      success: false,
+      message: "Erreur lors de la connexion",
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+};
+
+// ✅ Récupération des utilisateurs (Get Users)
+exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find({ role: "user" }).select("-password"); // Exclure les mots de passe
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ message: "Erreur lors de la récupération des utilisateurs", error: error.message });
+  }
+};
+
+// ✅ Récupération du profil utilisateur
+exports.getProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).populate("coach", "name email");
+    
+    if (!user) {
+      return res.status(404).json({ message: "Utilisateur non trouvé" });
+>>>>>>> 6794824 (Ajout du code)
     }
 
     res.status(200).json({
@@ -130,6 +266,7 @@ router.get("/me", authMiddleware.protect, async (req, res, next) => {
         name: user.name,
         email: user.email,
         role: user.role,
+<<<<<<< HEAD
         coach: user.coach,
       },
     });
@@ -140,3 +277,12 @@ router.get("/me", authMiddleware.protect, async (req, res, next) => {
 });
 
 module.exports = router;
+=======
+        coach: user.coach || null,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Erreur lors de la récupération du profil", error: error.message });
+  }
+};
+>>>>>>> 6794824 (Ajout du code)

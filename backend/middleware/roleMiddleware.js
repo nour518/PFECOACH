@@ -1,5 +1,5 @@
 // Middleware pour vérifier si l'utilisateur est un coach
-<<<<<<< HEAD
+
 const isCoach = (req, res, next) => {
   if (req.user && req.user.role === "coach") {
     next()
@@ -19,7 +19,7 @@ const isAdmin = (req, res, next) => {
 
 module.exports = { isCoach, isAdmin }
 
-=======
+
 exports.isCoach = (req, res, next) => {
   // L'utilisateur devrait être attaché à la requête par le middleware protect
   if (!req.user || req.user.role !== "coach") {
@@ -46,4 +46,3 @@ exports.hasRole = (roles = []) => {
   }
 }
 
->>>>>>> 873df53fabf76eacd26c160c16e45582903d1b80

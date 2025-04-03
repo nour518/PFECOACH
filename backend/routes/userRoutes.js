@@ -1,9 +1,13 @@
+<<<<<<< HEAD
 const bcrypt = require("bcryptjs"); // Ajoutez cette ligne
 const jwt = require("jsonwebtoken");
 const validator = require("validator");
 const User = require("../models/User");
 const authMiddleware = require("../middleware/authMiddleware");
 
+=======
+const express = require('express');
+>>>>>>> 6794824 (Ajout du code)
 const router = express.Router();
 
 // Fonction pour créer un objet erreur standardisé
@@ -19,6 +23,7 @@ router.post("/signup", async (req, res, next) => {
   try {
     const { name, email, password, role } = req.body;
 
+<<<<<<< HEAD
     if (!name || !email || !password) {
       return next(createError("Tous les champs sont requis", 400));
     }
@@ -68,3 +73,6 @@ router.post("/signup", async (req, res, next) => {
     next(createError("Une erreur est survenue lors de l'inscription", 500));
   }
 });
+=======
+module.exports = router;
+>>>>>>> 6794824 (Ajout du code)
