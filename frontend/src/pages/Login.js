@@ -24,62 +24,11 @@ const Login = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-<<<<<<< HEAD
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(""); // Réinitialiser les messages d'erreur
     setSuccess(""); // Réinitialiser les messages de succès
     setIsLoading(true);
-=======
- // Dans votre composant Login.js
- const handleSubmit = async (e) => {
-  e.preventDefault();
-  
-  try {
-    const response = await fetch('http://localhost:5002/api/users/signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-        passwordConfirm: formData.passwordConfirm // Ajoutez cette ligne si votre backend la demande
-      }),
-    });
->>>>>>> 6794824 (Ajout du code)
-
-    const data = await response.json();
-
-<<<<<<< HEAD
-      // Créer un objet utilisateur coach avec abonnement
-      const coachUser = {
-        id: "coach123",
-        name: "Sadek Coach",
-        email: "sadek21@gmail.com",
-        role: "coach",
-        subscription: {
-          isSubscribed: true,
-          plan: "premium",
-          expiresAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
-        },
-      };
-
-      // Stocker les informations du coach dans localStorage
-      localStorage.setItem("token", "coach_token_123456");
-      localStorage.setItem("user", JSON.stringify(coachUser));
-
-      // Rediriger vers la page appropriée
-      const redirectPath = getRedirectPath();
-      if (redirectPath === "subscription") {
-        navigate("/planaction");
-      } else {
-        navigate("/coach-dashboard");
-      }
-      setIsLoading(false);
-      return;
-    }
 
     try {
       const response = await fetch("http://localhost:5002/api/users/login", {
@@ -90,7 +39,7 @@ const Login = () => {
         body: JSON.stringify(formData),
       });
 
-      const data = await response.json(); 
+      const data = await response.json();
 
       if (response.ok) {
         setSuccess("Connexion réussie !");
@@ -129,20 +78,6 @@ const Login = () => {
       setIsLoading(false);
     }
   };
-=======
-    if (!response.ok) {
-      throw new Error(data.message || 'Erreur lors de l\'inscription');
-    }
-
-    console.log('Inscription réussie:', data);
-    // Redirection ou traitement du succès ici
-    
-  } catch (error) {
-    console.error('Erreur complète:', error);
-    setError(error.message || 'Erreur technique lors de l\'inscription');
-  }
-};
-(Ajout du code)
 
   return (
     <div className="login-container">

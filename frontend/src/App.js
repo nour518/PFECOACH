@@ -1,6 +1,5 @@
 import { createBrowserRouter, RouterProvider, Outlet, Navigate } from "react-router-dom";
 
-<<<<<<< HEAD
 import Home from "./pages/Home";
 import Register from "./pages/Register";
 import Test from "./pages/Test"; // Renommé
@@ -13,33 +12,11 @@ import Login from "./pages/Login";
 import CoachDashboard from "./pages/CoachDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import TestManagement from "./pages/TestManagement";
-import UserDashboard from "./pages/UserDashboard";
+import UserDashboard from './pages/UserDashboard';
 import PlanAction from "./components/PlanAction";
 import Subscription from "./pages/Subscription"; // Nouvelle page d'abonnement
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-=======
-import Home from "./pages/Home"
-import Register from "./pages/Register"
-import Test from "./pages/Test" // Renommé
-import Result from "./pages/Result" // Renommé
-import Contact from "./pages/Contact"
-import Diagnostic from "./pages/Diagnostic"
-import Demo from "./pages/Demo"
-import Signup from "./pages/Signup"
-import Login from "./pages/Login"
-import CoachDashboard from "./pages/CoachDashboard"
-import AdminDashboard from "./pages/AdminDashboard"
-import TestManagement from "./pages/TestManagement"
-
-
-import UserDashboard from './pages/UserDashboard'
-
-import PlanAction from "./components/PlanAction"
-import Subscription from "./pages/Subscription" // Nouvelle page d'abonnement
-import Navbar from "./components/Navbar"
-import Footer from "./components/Footer"
->>>>>>> 6794824 (Ajout du code)
 
 import "./styles.css";
 
@@ -83,23 +60,14 @@ function App() {
         { path: "demo", element: <Demo /> },
         { path: "signup", element: <Signup /> },
         { path: "login", element: <Login /> },
-<<<<<<< HEAD
         { path: "coach-dashboard", element: <CoachDashboard /> },
         { path: "admin-dashboard", element: <AdminDashboard /> },
         { path: "test-management", element: <TestManagement /> },
-        { path: "dashboard", element: <ProtectedRoute><UserDashboard /></ProtectedRoute> },
-      ],
-=======
-
-        { path: "coach-dashboard", element: <CoachDashboard /> },
-        { path: "admin-dashboard", element: <AdminDashboard /> },
-        { path: "test-management", element: <TestManagement /> },
-       { 
+        { 
           path: "dashboard", 
           element: <ProtectedRoute><UserDashboard /></ProtectedRoute> 
         },
-   ],
->>>>>>> 6794824 (Ajout du code)
+      ],
     },
   ]);
 
