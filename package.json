@@ -1,21 +1,21 @@
-<<<<<<< HEAD
-{"dependencies":{"@google/generative-ai":"^0.24.0","@react-google-maps/api":"^2.20.6","axios":"^1.7.9","cors":"^2.8.5","dotenv":"^16.4.7","express":"^4.21.2","lucide-react":"^0.479.0","mongoose":"^8.10.1","npm-force-resolutions":"^0.0.10","react":"^18.3.1","react-dom":"^18.3.1","react-router-dom":"^7.1.5","react-router-hash-link":"^2.4.3","react-scripts":"^5.0.1"},"scripts":{"start":"react-scripts start","build":"react-scripts build","test":"react-scripts test","eject":"react-scripts eject"}}
-=======
 {
   "dependencies": {
+    "@google/generative-ai": "^0.24.0",
     "@react-google-maps/api": "^2.20.6",
     "axios": "^1.7.9",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
+    "lucide-react": "^0.479.0",
     "mongoose": "^8.10.1",
     "npm-force-resolutions": "^0.0.10",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.1.5",
     "react-router-hash-link": "^2.4.3",
-    "react-scripts": "^5.0.1"
+    "react-scripts": "^5.0.1",
+    "validator": "^13.15.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -24,4 +24,3 @@
     "eject": "react-scripts eject"
   }
 }
->>>>>>> 873df53fabf76eacd26c160c16e45582903d1b80

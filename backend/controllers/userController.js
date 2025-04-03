@@ -1,82 +1,61 @@
-<<<<<<< HEAD
-const User = require("../models/User");
-const bcrypt = require("bcryptjs");
+const express = require("express");
 const jwt = require("jsonwebtoken");
-=======
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
-const validator = require('validator');
->>>>>>> 873df53fabf76eacd26c160c16e45582903d1b80
+const validator = require("validator");
+const User = require("../models/User");
+const authMiddleware = require("../middleware/authMiddleware");
+
+const router = express.Router();
 
 // Fonction pour créer un objet erreur standardisé
 const createError = (message, statusCode) => {
   const error = new Error(message);
   error.statusCode = statusCode;
-  error.status = `${statusCode}`.startsWith('4') ? 'fail' : 'error';
+  error.status = `${statusCode}`.startsWith("4") ? "fail" : "error";
   return error;
 };
 
-exports.signup = async (req, res, next) => {
+// ✅ Inscription
+router.post("/signup", async (req, res, next) => {
   try {
-<<<<<<< HEAD
     const { name, email, password, role } = req.body;
 
-    // Vérifier si l'utilisateur existe déjà
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: "Cet email est déjà utilisé." });
-    }
-
-    // Hasher le mot de passe
-    const hashedPassword = await bcrypt.hash(password, 10);
-=======
-    const { name, email, password } = req.body;
-
-    // Validation des champs
     if (!name || !email || !password) {
-      throw createError('Tous les champs sont requis', 400);
+      return next(createError("Tous les champs sont requis", 400));
     }
 
-    // Validation de l'email
     if (!validator.isEmail(email)) {
-      throw createError('Veuillez fournir un email valide', 400);
+      return next(createError("Veuillez fournir un email valide", 400));
     }
->>>>>>> 873df53fabf76eacd26c160c16e45582903d1b80
 
-    // Vérification de l'existence de l'utilisateur
-    const existingUser = await User.findOne({ email });
+    const normalizedEmail = email.trim().toLowerCase();
+
+    const existingUser = await User.findOne({ email: normalizedEmail });
     if (existingUser) {
-      throw createError('Email déjà utilisé', 400);
+      return next(createError("Cet email est déjà utilisé.", 400));
     }
 
-    // Création du nouvel utilisateur
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const newUser = await User.create({
       name,
-      email,
-<<<<<<< HEAD
+      email: normalizedEmail,
       password: hashedPassword,
-      role: role || "user", // Par défaut, le rôle est 'user'
+      role: role || "user",
     });
 
-    await newUser.save();
+    if (!process.env.JWT_SECRET) {
+      return next(createError("Erreur interne : clé JWT manquante", 500));
+    }
 
-    // Générer un token JWT
-    const token = jwt.sign({ id: newUser._id, role: newUser.role }, process.env.JWT_SECRET, { expiresIn: "30d" });
-=======
-      password
-    });
+    const token = jwt.sign(
+      { id: newUser._id, role: newUser.role },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRES_IN || "30d" }
+    );
 
-    // Génération du token JWT
-    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPIRES_IN || '1d'
-    });
->>>>>>> 873df53fabf76eacd26c160c16e45582903d1b80
-
-    // Réponse réussie
     res.status(201).json({
-      status: 'success',
+      status: "success",
       token,
-<<<<<<< HEAD
       user: {
         id: newUser._id,
         name: newUser.name,
@@ -84,71 +63,45 @@ exports.signup = async (req, res, next) => {
         role: newUser.role,
       },
     });
-  } catch (error) {
-    res.status(500).json({ message: "Erreur lors de l'inscription", error: error.message });
-=======
-      data: {
-        user: {
-          _id: newUser._id,
-          name: newUser.name,
-          email: newUser.email,
-          role: newUser.role,
-          isVerified: newUser.isVerified
-        }
-      }
-    });
-
   } catch (err) {
-    // Passage à la gestion d'erreur centralisée
-    next(err);
->>>>>>> 873df53fabf76eacd26c160c16e45582903d1b80
+    console.error("❌ Erreur lors de l'inscription :", err);
+    next(createError("Une erreur est survenue lors de l'inscription", 500));
   }
-};
+});
 
-exports.login = async (req, res, next) => {
+// ✅ Connexion
+router.post("/login", async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const { email } = req.body;
+    console.log("🔍 Tentative de connexion avec l'email :", email);
 
-<<<<<<< HEAD
-    // Vérifier si l'utilisateur existe
-    const user = await User.findOne({ email });
+    if (!email) {
+      return next(createError("Veuillez fournir un email", 400));
+    }
+
+    const normalizedEmail = email.trim().toLowerCase();
+
+    const user = await User.findOne({ email: normalizedEmail });
+    console.log("🔎 Utilisateur trouvé :", user ? user.email : "Aucun utilisateur trouvé");
+
     if (!user) {
-      return res.status(400).json({ message: "Email ou mot de passe incorrect." });
+      console.log("⚠️ Email incorrect pour :", normalizedEmail);
+      return next(createError("Email incorrect", 401));
     }
 
-    // Vérifier le mot de passe
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      return res.status(400).json({ message: "Email ou mot de passe incorrect." });
+    if (!process.env.JWT_SECRET) {
+      return next(createError("Erreur interne : clé JWT manquante", 500));
     }
 
-    // Générer un token JWT
-    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "30d" });
-=======
-    // Vérification des champs
-    if (!email || !password) {
-      throw createError('Veuillez fournir un email et un mot de passe', 400);
-    }
+    const token = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRES_IN || "30d" }
+    );
 
-    // Recherche de l'utilisateur avec le mot de passe
-    const user = await User.findOne({ email }).select('+password');
-    
-    // Vérification de l'utilisateur et du mot de passe
-    if (!user || !(await user.comparePassword(password))) {
-      throw createError('Email ou mot de passe incorrect', 401);
-    }
-
-    // Génération du token
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPIRES_IN || '1d'
-    });
->>>>>>> 873df53fabf76eacd26c160c16e45582903d1b80
-
-    // Réponse réussie
     res.status(200).json({
-      status: 'success',
+      status: "success",
       token,
-<<<<<<< HEAD
       user: {
         id: user._id,
         name: user.name,
@@ -156,61 +109,34 @@ exports.login = async (req, res, next) => {
         role: user.role,
       },
     });
-  } catch (error) {
-    res.status(500).json({ message: "Erreur lors de la connexion", error: error.message });
-  }
-};
-=======
-      data: {
-        user: {
-          _id: user._id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-          isVerified: user.isVerified
-        }
-      }
-    });
->>>>>>> 873df53fabf76eacd26c160c16e45582903d1b80
-
   } catch (err) {
-    next(err);
+    console.error("❌ Erreur lors de la connexion :", err);
+    next(createError("Une erreur est survenue lors de la connexion", 500));
   }
-};
+});
 
-exports.getProfile = async (req, res, next) => {
+// ✅ Profil utilisateur
+router.get("/me", authMiddleware.protect, async (req, res, next) => {
   try {
-<<<<<<< HEAD
-    const users = await User.find({ role: "user" }).select("-password");
-    res.status(200).json(users);
-  } catch (error) {
-    res.status(500).json({ message: "Erreur lors de la récupération des utilisateurs", error: error.message });
-  }
-};
-
-module.exports = { register, login, getAllUsers };
-=======
-    const user = await User.findById(req.user.id).populate('coach', 'name email');
-    
+    const user = await User.findById(req.user.id).populate("coach", "name email");
     if (!user) {
-      throw createError('Utilisateur non trouvé', 404);
+      return next(createError("Utilisateur non trouvé", 404));
     }
 
     res.status(200).json({
-      status: 'success',
-      data: {
-        user: {
-          _id: user._id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-          isVerified: user.isVerified,
-          coach: user.coach
-        }
-      }
+      status: "success",
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        coach: user.coach,
+      },
     });
   } catch (err) {
-    next(err);
+    console.error("❌ Erreur lors de la récupération du profil :", err);
+    next(createError("Une erreur est survenue lors de la récupération du profil", 500));
   }
-};
->>>>>>> 873df53fabf76eacd26c160c16e45582903d1b80
+});
+
+module.exports = router;

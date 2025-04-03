@@ -20,10 +20,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
-<<<<<<< HEAD
-=======
     "express-validator": "^7.2.1",
->>>>>>> 873df53fabf76eacd26c160c16e45582903d1b80
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.12.1",
     "openai": "^4.85.3"

@@ -1,5 +1,5 @@
 const User = require("../models/User")
-const Diagnostic = require("../models/diagnostic")
+const Diagnostic = require("../models/Diagnostic")
 const ActionPlan = require("../models/ActionPlan")
 
 // Statistiques pour le dashboard admin
