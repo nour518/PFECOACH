@@ -16,6 +16,7 @@ import UserDashboard from './pages/UserDashboard';
 import PlanAction from "./components/PlanAction";
 import Subscription from "./pages/Subscription"; // Nouvelle page d'abonnement
 import Navbar from "./components/Navbar";
+import Profil from "./components/Profil";
 import Footer from "./components/Footer";
 
 import "./styles.css";
@@ -63,6 +64,7 @@ function App() {
         { path: "coach-dashboard", element: <CoachDashboard /> },
         { path: "admin-dashboard", element: <AdminDashboard /> },
         { path: "test-management", element: <TestManagement /> },
+        { path: "profil", element: <Profil />} ,
         { 
           path: "dashboard", 
           element: <ProtectedRoute><UserDashboard /></ProtectedRoute> 

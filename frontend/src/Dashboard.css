@@ -1,0 +1,154 @@
+/* Dashboard.css */
+
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7fb;
+    color: #333;
+  }
+  
+  /* Dashboard Container */
+  .dashboard {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  /* Sidebar Styles */
+  .sidebar {
+    background-color: #003366;
+    color: #fff;
+    width: 250px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: fixed;
+    height: 100%;
+    transition: all 0.3s ease;
+  }
+  
+  .sidebar h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .sidebar nav {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .sidebar button {
+    background: none;
+    border: none;
+    color: #fff;
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    text-align: left;
+    cursor: pointer;
+    margin: 10px 0;
+    transition: background 0.3s ease;
+  }
+  
+  .sidebar button:hover,
+  .sidebar button.active {
+    background-color: #005b99;
+    border-radius: 5px;
+  }
+  
+  .sidebar button:focus {
+    outline: none;
+  }
+  
+  /* Main Content Styles */
+  .main {
+    margin-left: 250px;
+    width: calc(100% - 250px);
+    padding: 20px;
+    overflow-y: auto;
+    transition: margin-left 0.3s ease;
+  }
+  
+  .main .header {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .main .header h1 {
+    font-size: 2rem;
+    color: #333;
+  }
+  
+  /* Content Area */
+  .content {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Cards */
+  .cards {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+  }
+  
+  .card {
+    background-color: #0073e6;
+    color: white;
+    width: 30%;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+  
+  .card p {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+  
+  /* Responsiveness */
+  @media (max-width: 900px) {
+    .dashboard {
+      flex-direction: column;
+    }
+  
+    .sidebar {
+      width: 100%;
+      position: relative;
+      height: auto;
+      padding: 10px;
+    }
+  
+    .main {
+      margin-left: 0;
+      width: 100%;
+    }
+  
+    .cards {
+      flex-direction: column;
+    }
+  
+    .card {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+  }
+  

@@ -1,4 +1,3 @@
-"use client"
 
 import { Link, useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
@@ -8,11 +7,26 @@ function Navbar() {
   const navigate = useNavigate()
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
-  // Vérifier si l'utilisateur est connecté
-  useEffect(() => {
+  // Vérifier si l'utilisateur est connecté (en surveillant localStorage)
+  const checkUser = () => {
     const user = localStorage.getItem("user")
-    setIsLoggedIn(!!user)
-  }, [])
+    setIsLoggedIn(!!user) // !! converts to true/false
+  }
+
+  useEffect(() => {
+    checkUser()
+
+    // Optionally listen to storage changes (from other tabs)
+    const handleStorageChange = () => {
+      checkUser()
+    }
+
+    window.addEventListener("storage", handleStorageChange)
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange)
+    }
+  })
 
   // Fonction pour faire défiler vers une section
   const scrollToSection = (id) => {
@@ -48,7 +62,6 @@ function Navbar() {
             Diagnostic
           </Link>
         </li>
-        {/* Remplacez HashLink par un Link avec onClick */}
         <li>
           <Link
             to="/"
@@ -100,4 +113,3 @@ function Navbar() {
 }
 
 export default Navbar
-
