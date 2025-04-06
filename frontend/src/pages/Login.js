@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import "../styles.css";
@@ -60,13 +58,13 @@ const Login = () => {
         }
 
         // Rediriger vers la page appropriée
-        const redirectPath = getRedirectPath();
-        if (redirectPath === "subscription") {
-          navigate("/planaction");
+      
+        if (data.user.role === "user") {
+          navigate("/dashboard");
         } else if (data.user.role === "coach") {
-          navigate("/coach-dashboard");
+          navigate("/coachdashboard");
         } else {
-          navigate(redirectPath);
+          navigate("/");
         }
       } else {
         setError(data.message || "Une erreur s'est produite lors de la connexion.");

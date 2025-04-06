@@ -1,29 +1,13 @@
-// routes/coachRoutes.js
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const { protect } = require("../middleware/authMiddleware");
-const { isCoach } = require("../middleware/roleMiddleware");
-const {
-  addCoach,
-  getAllCoaches,
-  getCoachById,
-  updateCoach,
-  deleteCoach,
-} = require("../controllers/coachController");
+const { addCoach, getAllCoaches, getCoachById, updateCoach, deleteCoach } = require('../controllers/coachController');
+const protect = require('../middleware/authMiddleware');
+const checkRole = require('../middleware/checkRole');
 
-// Route pour ajouter un coach
-router.post("/", protect, isCoach, addCoach);
-
-// Route pour récupérer tous les coachs
-router.get("/", protect, isCoach, getAllCoaches);
-
-// Route pour récupérer un coach par ID
-router.get("/:id", protect, isCoach, getCoachById);
-
-// Route pour mettre à jour un coach
-router.put("/:id", protect, isCoach, updateCoach);
-
-// Route pour supprimer un coach
-router.delete("/:id", protect, isCoach, deleteCoach);
+router.post('/add', protect, checkRole('admin'), addCoach); // Ajout d'un coach par un admin
+router.get('/', protect, checkRole('coach'), getAllCoaches); // Récupérer tous les coachs (pour les coachs uniquement)
+router.get('/:id', protect, checkRole('coach'), getCoachById); // Détails d'un coach
+router.put('/:id', protect, checkRole('coach'), updateCoach); // Mise à jour d'un coach
+router.delete('/:id', protect, checkRole('admin'), deleteCoach); // Suppression d'un coach (admin uniquement)
 
 module.exports = router;

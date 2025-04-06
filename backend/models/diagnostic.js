@@ -36,5 +36,4 @@ const DiagnosticSchema = new mongoose.Schema({
   },
 });
 
-// Créer et exporter le modèle
 module.exports = mongoose.model("Diagnostic", DiagnosticSchema);

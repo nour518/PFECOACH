@@ -1,17 +1,13 @@
-// controllers/coachController.js
-const Coach = require('../models/Coach');  // Assurez-vous que le chemin est correct
+const Coach = require('../models/Coach');
 
 // Ajouter un coach
 const addCoach = async (req, res) => {
   try {
-    const { name, expertise } = req.body;
-    const newCoach = new Coach({ name, expertise });
-
-    const savedCoach = await newCoach.save();
-    res.status(201).json(savedCoach);
+    const newCoach = new Coach(req.body);
+    await newCoach.save();
+    res.status(201).json(newCoach);
   } catch (error) {
-    console.error("Erreur lors de l'ajout d'un coach:", error);
-    res.status(500).json({ message: "Erreur lors de l'ajout d'un coach", error: error.message });
+    res.status(400).json({ message: 'Erreur lors de l\'ajout du coach' });
   }
 };
 
@@ -19,10 +15,9 @@ const addCoach = async (req, res) => {
 const getAllCoaches = async (req, res) => {
   try {
     const coaches = await Coach.find();
-    res.status(200).json(coaches);
+    res.json(coaches);
   } catch (error) {
-    console.error("Erreur lors de la récupération des coachs:", error);
-    res.status(500).json({ message: "Erreur lors de la récupération des coachs", error: error.message });
+    res.status(400).json({ message: 'Erreur lors de la récupération des coachs' });
   }
 };
 
@@ -30,52 +25,38 @@ const getAllCoaches = async (req, res) => {
 const getCoachById = async (req, res) => {
   try {
     const coach = await Coach.findById(req.params.id);
-
     if (!coach) {
-      return res.status(404).json({ message: "Coach non trouvé" });
+      return res.status(404).json({ message: 'Coach non trouvé' });
     }
-
-    res.status(200).json(coach);
+    res.json(coach);
   } catch (error) {
-    console.error("Erreur lors de la récupération du coach:", error);
-    res.status(500).json({ message: "Erreur lors de la récupération du coach", error: error.message });
+    res.status(400).json({ message: 'Erreur lors de la récupération du coach' });
   }
 };
 
-// Mettre à jour un coach
+// Mise à jour d'un coach
 const updateCoach = async (req, res) => {
   try {
-    const { name, expertise } = req.body;
-    const coach = await Coach.findByIdAndUpdate(
-      req.params.id,
-      { name, expertise },
-      { new: true }  // Renvoie l'objet mis à jour
-    );
-
-    if (!coach) {
-      return res.status(404).json({ message: "Coach non trouvé" });
+    const updatedCoach = await Coach.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!updatedCoach) {
+      return res.status(404).json({ message: 'Coach non trouvé' });
     }
-
-    res.status(200).json(coach);
+    res.json(updatedCoach);
   } catch (error) {
-    console.error("Erreur lors de la mise à jour du coach:", error);
-    res.status(500).json({ message: "Erreur lors de la mise à jour du coach", error: error.message });
+    res.status(400).json({ message: 'Erreur lors de la mise à jour du coach' });
   }
 };
 
-// Supprimer un coach
+// Suppression d'un coach
 const deleteCoach = async (req, res) => {
   try {
     const coach = await Coach.findByIdAndDelete(req.params.id);
-
     if (!coach) {
-      return res.status(404).json({ message: "Coach non trouvé" });
+      return res.status(404).json({ message: 'Coach non trouvé' });
     }
-
-    res.status(200).json({ message: "Coach supprimé avec succès" });
+    res.status(204).json({ message: 'Coach supprimé' });
   } catch (error) {
-    console.error("Erreur lors de la suppression du coach:", error);
-    res.status(500).json({ message: "Erreur lors de la suppression du coach", error: error.message });
+    res.status(400).json({ message: 'Erreur lors de la suppression du coach' });
   }
 };
 

@@ -45,4 +45,3 @@ exports.hasRole = (roles = []) => {
     next()
   }
 }
-

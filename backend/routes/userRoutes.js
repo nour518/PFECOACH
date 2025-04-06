@@ -20,28 +20,22 @@ router.post("/signup", async (req, res, next) => {
   try {
     const { name, email, password, role } = req.body;
 
-    // Validation des champs obligatoires
     if (!name || !email || !password) {
       return next(createError("Tous les champs sont requis", 400));
     }
 
-    // Vérification de la validité de l'email
     if (!validator.isEmail(email)) {
       return next(createError("Veuillez fournir un email valide", 400));
     }
 
     const normalizedEmail = email.trim().toLowerCase();
-
-    // Vérification si l'email est déjà utilisé
     const existingUser = await User.findOne({ email: normalizedEmail });
     if (existingUser) {
       return next(createError("Cet email est déjà utilisé.", 400));
     }
 
-    // Hachage du mot de passe
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Création de l'utilisateur
     const newUser = await User.create({
       name,
       email: normalizedEmail,
@@ -49,19 +43,16 @@ router.post("/signup", async (req, res, next) => {
       role: role || "user",
     });
 
-    // Vérification de la clé JWT
     if (!process.env.JWT_SECRET) {
       return next(createError("Erreur interne : clé JWT manquante", 500));
     }
 
-    // Création du token JWT
     const token = jwt.sign(
       { id: newUser._id, role: newUser.role },
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRES_IN || "30d" }
     );
 
-    // Réponse avec le token et l'utilisateur
     res.status(201).json({
       status: "success",
       token,
@@ -83,33 +74,32 @@ router.post("/login", async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    // Validation des champs
     if (!email || !password) {
       return next(createError("Email et mot de passe sont requis", 400));
     }
 
     const normalizedEmail = email.trim().toLowerCase();
-
-    // Recherche de l'utilisateur par email
     const user = await User.findOne({ email: normalizedEmail });
     if (!user) {
       return next(createError("Email incorrect", 401));
     }
 
-   
-    // Vérification de la clé JWT
+    // ✅ Vérification du mot de passe
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return next(createError("Mot de passe incorrect", 401));
+    }
+
     if (!process.env.JWT_SECRET) {
       return next(createError("Erreur interne : clé JWT manquante", 500));
     }
 
-    // Création du token JWT
     const token = jwt.sign(
       { id: user._id, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRES_IN || "30d" }
     );
 
-    // Réponse avec le token et l'utilisateur
     res.status(200).json({
       status: "success",
       token,
@@ -149,5 +139,6 @@ router.get("/me", authMiddleware.protect, async (req, res, next) => {
     next(createError("Une erreur est survenue lors de la récupération du profil", 500));
   }
 });
+
 
 module.exports = router;

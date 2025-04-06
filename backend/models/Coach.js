@@ -1,14 +1,13 @@
-// models/Coach.js
 const mongoose = require('mongoose');
 
 const coachSchema = mongoose.Schema(
   {
     name: { type: String, required: true },
-    expertise: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    role: { type: String, enum: ['coach', 'admin'], default: 'coach' },
   },
   { timestamps: true }
 );
 
-const Coach = mongoose.model('Coach', coachSchema);
-
-module.exports = Coach;
+module.exports = mongoose.model('Coach', coachSchema);
