@@ -16,6 +16,7 @@ import UserDashboard from './pages/UserDashboard';
 import PlanAction from "./components/PlanAction";
 import Subscription from "./pages/Subscription"; // Nouvelle page d'abonnement
 import Navbar from "./components/Navbar";
+import Profil from "./components/Profil";
 import Footer from "./components/Footer";
 
 import "./styles.css";
@@ -29,6 +30,15 @@ function Layout() {
       <Footer />
     </>
   );
+}
+function RoleBasedRedirect() {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  if (!user) return <Navigate to="/login" replace />;
+
+  if (user.role === "coach") return <Navigate to="/coach-dashboard" replace />;
+  if (user.role === "admin") return <Navigate to="/admin-dashboard" replace />;
+  return <Navigate to="/user-dashboard" replace />;
 }
 
 // Composant pour protéger les routes qui nécessitent une authentification
@@ -60,13 +70,26 @@ function App() {
         { path: "demo", element: <Demo /> },
         { path: "signup", element: <Signup /> },
         { path: "login", element: <Login /> },
-        { path: "coach-dashboard", element: <CoachDashboard /> },
         { path: "admin-dashboard", element: <AdminDashboard /> },
         { path: "test-management", element: <TestManagement /> },
-        { 
-          path: "dashboard", 
-          element: <ProtectedRoute><UserDashboard /></ProtectedRoute> 
+        { path: "profil", element: <Profil />} ,
+        { path: "user-dashboard", 
+          element: (
+            <ProtectedRoute>
+              <UserDashboard />
+            </ProtectedRoute>
+          ),
         },
+        {
+          path: "coach-dashboard/sadek",
+          element: (
+            <ProtectedRoute>
+              <CoachDashboard coachName="Sadek" /> {/* Affichage spécifique pour ce coach */}
+            </ProtectedRoute>
+          ),
+        },
+        
+        
       ],
     },
   ]);

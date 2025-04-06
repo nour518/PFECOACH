@@ -27,42 +27,39 @@ const Login = () => {
     setError(""); // Réinitialiser les messages d'erreur
     setSuccess(""); // Réinitialiser les messages de succès
     setIsLoading(true);
-
+  
     try {
-      const response = await fetch("http://localhost:5002/api/users/login", {
+      // Si l'email est sadek21@gmail.com, utiliser la route des coachs
+      const loginEndpoint = formData.email === "sadek21@gmail.com" 
+        ? "http://localhost:5002/api/coaches/login" 
+        : "http://localhost:5002/api/users/login";
+      
+      const response = await fetch(loginEndpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
-
+  
       const data = await response.json();
-
+  
       if (response.ok) {
         setSuccess("Connexion réussie !");
-
-        // Ajouter un abonnement fictif pour la démo
-        if (data.user) {
-          data.user.subscription = {
-            isSubscribed: true,
-            plan: "basic",
-            expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-          };
-        }
-
+  
         // Stocker le token et les informations utilisateur dans localStorage
         if (data.token && data.user) {
           localStorage.setItem("token", data.token);
           localStorage.setItem("user", JSON.stringify(data.user));
         }
-
-        // Rediriger vers la page appropriée
-      
-        if (data.user.role === "user") {
-          navigate("/dashboard");
+  
+        // Rediriger vers le dashboard du coach spécifique
+        if (data.user.email === "sadek21@gmail.com" && formData.password === "123456") {
+          navigate("/coach-dashboard/sadek"); // Route spécifique pour ce coach
+        } else if (data.user.role === "user") {
+          navigate("/user-dashboard");
         } else if (data.user.role === "coach") {
-          navigate("/coachdashboard");
+          navigate("/coach-dashboard"); // Redirection vers un dashboard générique pour d'autres coachs
         } else {
           navigate("/");
         }
@@ -76,6 +73,7 @@ const Login = () => {
       setIsLoading(false);
     }
   };
+  
 
   return (
     <div className="login-container">
