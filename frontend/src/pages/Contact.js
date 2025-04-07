@@ -1,6 +1,6 @@
 import React from "react";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
-import "../styles.css";
+import "../contact.css";
 
 // Style pour la carte
 const containerStyle = {

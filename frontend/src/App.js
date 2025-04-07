@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider, Outlet, Navigate } from "react-router-dom";
 
 import Home from "./pages/Home";
-import Register from "./pages/Register";
+
 import Test from "./pages/Test"; // Renommé
 import Result from "./pages/Result"; // Renommé
 import Contact from "./pages/Contact";
@@ -19,7 +19,7 @@ import Navbar from "./components/Navbar";
 import Profil from "./components/Profil";
 import Footer from "./components/Footer";
 
-import "./styles.css";
+import "./home.css";
 
 // Composant Layout qui inclut Navbar et Footer
 function Layout() {
@@ -60,8 +60,7 @@ function App() {
       element: <Layout />,
       children: [
         { index: true, element: <Home /> },
-        { path: "register", element: <Register /> },
-        { path: "test", element: <Test /> }, // Mise à jour
+      { path: "test", element: <Test /> }, // Mise à jour
         { path: "result", element: <Result /> }, // Mise à jour
         { path: "contact", element: <Contact /> },
         { path: "diagnostic", element: <Diagnostic /> },

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles.css";
+import "../result.css";
 
 const Result = () => {
   const navigate = useNavigate();
@@ -8,7 +8,6 @@ const Result = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Récupérer le diagnostic du localStorage
     const storedDiagnostic = localStorage.getItem("diagnostic");
 
     if (storedDiagnostic) {
@@ -20,7 +19,6 @@ const Result = () => {
         navigate("/test");
       }
     } else {
-      // Si pas de diagnostic, rediriger vers la page de test
       navigate("/test");
     }
 
@@ -48,11 +46,21 @@ const Result = () => {
   return (
     <div className="result-page">
       <div className="result-container">
+        {/* Avatar AI animé */}
+        <img
+          src="https://api.dicebear.com/7.x/bottts-neutral/svg?seed=diagnostic"
+          alt="AI Avatar"
+          className="ai-avatar"
+        />
+
         <h1>Votre Diagnostic</h1>
         <p className="result-date">Généré le {new Date().toLocaleDateString()}</p>
-        <div className="diagnostic-content">
-          <pre>{diagnosticData.diagnostic}</pre>
+
+        {/* Diagnostic avec effet machine à écrire */}
+        <div className="diagnostic-content typewriter">
+          {diagnosticData.diagnostic}
         </div>
+
         <button onClick={() => navigate("/")} className="action-button">
           Retour à l'accueil
         </button>

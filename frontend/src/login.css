@@ -1,0 +1,395 @@
+/* login.css - Version Premium */
+
+/* ===== POLICES & VARIABLES ===== */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary: #6d28d9;
+  --primary-light: #8b5cf6;
+  --secondary: #10b981;
+  --accent: #f59e0b;
+  --dark: #1f2937;
+  --light: #f9fafb;
+  --text: #374151;
+  --white: #ffffff;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+  --shadow-lg: 0 15px 30px rgba(0,0,0,0.15);
+  --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+}
+
+body{
+  background-color: #374151;
+}
+/* ===== STRUCTURE DE BASE ===== */
+.login-container {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 3.5rem;
+  background: var(--white);
+  border-radius: 20px;
+  box-shadow: var(--shadow-lg);
+  font-family: 'Poppins', sans-serif;
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.8s ease;
+}
+
+.login-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  background: linear-gradient(90deg, var(--primary), var(--primary-light));
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== EN-TÊTE ===== */
+.login-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  position: relative;
+}
+
+.login-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+  background: linear-gradient(to right, var(--primary), var(--primary-light));
+
+  -webkit-text-fill-color: transparent;
+}
+
+.login-description {
+  color: var(--text);
+  opacity: 0.8;
+  font-size: 1.05rem;
+  margin-bottom: 0;
+}
+
+/* ===== FORMULAIRE ===== */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.form-group {
+  position: relative;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.8rem;
+  font-weight: 500;
+  color: var(--dark);
+  font-size: 0.95rem;
+}
+
+.form-group input {
+  width: 90%;
+  padding: 1.2rem 1.5rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: var(--transition);
+  background-color: var(--light);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--primary-light);
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.2);
+  background-color: var(--white);
+}
+
+/* Icônes des champs */
+.form-group::after {
+  font-family: 'Material Icons';
+  position: absolute;
+  right: 1.5rem;
+  top: 55%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  font-size: 1.5rem;
+}
+
+.email-field::after {
+  content: 'email';
+}
+
+.password-field::after {
+  content: 'lock';
+}
+
+/* ===== BOUTON ===== */
+.login-btn {
+  padding: 1.2rem;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  color: var(--white);
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-md);
+  margin-top: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.login-btn:disabled {
+  background: #cbd5e1;
+  transform: none;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* Effet de vague au survol */
+.login-btn::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 200%;
+  height: 200%;
+  background: rgba(255,255,255,0.15);
+  transform: rotate(30deg);
+  transition: all 0.3s ease;
+}
+
+.login-btn:hover::after {
+  left: 100%;
+}
+
+/* ===== LIENS ===== */
+.login-links {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+  font-size: 0.95rem;
+}
+
+.forgot-password a, 
+.signup-link a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+  transition: var(--transition);
+}
+
+.forgot-password a::after,
+.signup-link a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--primary-light);
+  transition: var(--transition);
+}
+
+.forgot-password a:hover::after,
+.signup-link a:hover::after {
+  width: 100%;
+}
+
+.forgot-password a:hover,
+.signup-link a:hover {
+  color: var(--primary-light);
+}
+
+/* ===== MESSAGES ===== */
+.error-message {
+  background: #fee2e2;
+  color: #b91c1c;
+  padding: 1.2rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  border-left: 4px solid #ef4444;
+  animation: shake 0.5s ease;
+}
+
+.success-message {
+  background: #dcfce7;
+  color: #166534;
+  padding: 1.2rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  border-left: 4px solid #10b981;
+  animation: fadeIn 0.6s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-5px); }
+  40%, 80% { transform: translateX(5px); }
+}
+
+/* ===== DIVIDER ===== */
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 2rem 0;
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #e2e8f0;
+  margin: 0 1rem;
+}
+
+/* ===== SOCIAL LOGIN ===== */
+.social-login {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.social-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--white);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  border: 1px solid #e2e8f0;
+}
+
+.social-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 640px) {
+  .login-container {
+    padding: 2.5rem 2rem;
+    margin: 1.5rem;
+  }
+  
+  .login-header h1 {
+    font-size: 2rem;
+  }
+  
+  .login-links {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+  }
+}
+/* Style de base du bouton */
+button[type="submit"] {
+  position: relative;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #6d28d9 0%, #8b5cf6 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+  box-shadow: 0 4px 15px rgba(107, 70, 246, 0.3);
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Effet au survol */
+button[type="submit"]:not(:disabled):hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(107, 70, 246, 0.4);
+  background: linear-gradient(135deg, #5b21b6 0%, #7c3aed 100%);
+}
+
+/* Effet au clic */
+button[type="submit"]:not(:disabled):active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 10px rgba(107, 70, 246, 0.4);
+}
+
+/* Bouton désactivé (pendant le chargement) */
+button[type="submit"]:disabled {
+  background: #e2e8f0;
+  color: #94a3b8;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none !important;
+}
+
+/* Animation de chargement */
+button[type="submit"]:disabled::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: loadingShimmer 1.5s infinite;
+}
+
+@keyframes loadingShimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Icône de chargement */
+button[type="submit"]:disabled::before {
+  content: "";
+  display: inline-block;
+  width: 1.2rem;
+  height: 1.2rem;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 0.8rem;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Texte du bouton */
+button[type="submit"] span {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+}

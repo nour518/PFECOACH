@@ -1,7 +1,7 @@
 
 import { Link, useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
-import "../styles.css"
+import "../navbar.css"
 
 function Navbar() {
   const navigate = useNavigate()
@@ -82,11 +82,21 @@ function Navbar() {
 
         {isLoggedIn ? (
           <>
-            <li>
-              <Link to="/dashboard" className="navbar-link">
-                Tableau de bord
-              </Link>
-            </li>
+<li>
+<Link
+  to={
+    JSON.parse(localStorage.getItem("user"))?.role === "coach"
+      ? "/coach-dashboard/sadek"
+      : "/user-dashboard"
+  }
+  className="navbar-link"
+>
+  Compte
+</Link>
+
+</li>
+
+
             <li>
               <button onClick={handleLogout} className="navbar-link logout-link">
                 Déconnexion

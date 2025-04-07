@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import "../styles.css";
+import "../login.css";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -110,8 +110,16 @@ const Login = () => {
           />
         </div>
         <button type="submit" disabled={isLoading}>
-          {isLoading ? "Connexion en cours..." : "Se connecter"}
-        </button>
+  <span>
+    {isLoading ? (
+      <>
+        <span>Connexion en cours...</span>
+      </>
+    ) : (
+      "Se connecter"
+    )}
+  </span>
+</button>
       </form>
       <p className="forgot-password">
         <Link to="/forgot-password">Mot de passe oublié ?</Link>

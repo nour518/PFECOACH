@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import "../styles.css"
+import "../userdashbord.css"
 
 const Dashboard = () => {
   const [active, setActive] = useState('overview');

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-
+import "../signup.css"
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -112,17 +112,17 @@ const Signup = () => {
       {error && <div className="error-message">{error}</div>}
 
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
+        <div className="form-group-1">
           <label>Nom complet</label>
           <input type="text" name="name" value={formData.name} onChange={handleChange} required />
         </div>
 
-        <div className="form-group">
+        <div className="form-group-1">
           <label>Email</label>
           <input type="email" name="email" value={formData.email} onChange={handleChange} required />
         </div>
 
-        <div className="form-group">
+        <div className="form-group-1">
           <label>Mot de passe</label>
           <input type="password" name="password" value={formData.password} onChange={handleChange} required />
 
@@ -140,15 +140,28 @@ const Signup = () => {
         </div>
 
         <button
-          type="submit"
-          disabled={loading || !isPasswordValid()}
-          style={{
-            opacity: !isPasswordValid() || loading ? 0.7 : 1,
-            cursor: !isPasswordValid() || loading ? "not-allowed" : "pointer",
-          }}
-        >
-          {loading ? "Chargement..." : "S'inscrire"}
-        </button>
+  type="submit"
+  disabled={loading || !isPasswordValid()}
+  className={!isPasswordValid() ? "invalid-password" : ""}
+>
+  {loading ? (
+    <span className="button-validation-text">
+      <span className="loading-spinner"></span>
+      Chargement...
+    </span>
+  ) : (
+    <span className="button-validation-text">
+      S'inscrire
+      {isPasswordValid() && (
+        <span className="password-valid-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M20 6L9 17l-5-5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </span>
+      )}
+    </span>
+  )}
+</button>
       </form>
     </div>
   )
