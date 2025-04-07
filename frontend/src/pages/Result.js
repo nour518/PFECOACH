@@ -47,12 +47,12 @@ const Result = () => {
     <div className="result-page">
       <div className="result-container">
         {/* Avatar AI animé */}
+       
         <img
-          src="https://api.dicebear.com/7.x/bottts-neutral/svg?seed=diagnostic"
-          alt="AI Avatar"
-          className="ai-avatar"
-        />
-
+  src="https://cdn.futura-sciences.com/sources/images/IA-technologie.jpeg"
+  alt=""
+  className="img"
+/>
         <h1>Votre Diagnostic</h1>
         <p className="result-date">Généré le {new Date().toLocaleDateString()}</p>
 

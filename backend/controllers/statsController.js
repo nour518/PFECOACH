@@ -3,9 +3,6 @@ const User = require("../models/User")
 const Diagnostic = require("../models/Diagnostic")
 const ActionPlan = require("../models/ActionPlan")
 
-const User = require("../models/User");
-const Diagnostic = require("../models/diagnostic");
-const ActionPlan = require("../models/ActionPlan");
 
 // ✅ Statistiques pour le dashboard admin
 const getAdminStats = async (req, res) => {
