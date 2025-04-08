@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const geminiService = require('../services/geminiService');
-const Diagnostic = require('../models/diagnostic');
+const Diagnostic = require('../models/Diagnostic');
 
 const generateDiagnostic = async (req, res) => {
   try {

@@ -26,7 +26,7 @@ const Contact = () => {
       <div className="contact-details">
         <div className="contact-info">
           <h3>Nom de la Société</h3>
-          <p>coaches</p>
+          <p>coachs</p>
 
           <h3>Adresse</h3>
           <p>123 Rue de l'Entreprise, Gabés</p>

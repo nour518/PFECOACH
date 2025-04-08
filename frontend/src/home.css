@@ -1,4 +1,4 @@
-/* Nouveau style pour la page d'accueil - Thème moderne et dynamique */
+
 :root {
   --primary-color: #2196f3;
   --primary-dark: #1976d2;
@@ -51,16 +51,6 @@ h2,
 h3 {
   font-weight: 700;
   line-height: 1.3;
-}
-
-h1 {
-  font-size: 3.5rem;
-  margin-bottom: 1.5rem;
-background-color: white;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-fill-color: transparent;
 }
 
 h2 {
@@ -472,7 +462,7 @@ section {
 
 /* Clients Coached Section - Style moderne avec statistiques animées */
 .clients-coached {
-  background: linear-gradient(135deg, #64b5f6 0%, #1976d2 100%);
+  background: linear-gradient(90deg, #6c5ce7, #a29bfe);
   text-align: center;
   padding-top: 8rem;
   padding-bottom: 8rem;
@@ -559,7 +549,6 @@ section {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  text-fill-color: transparent;
   margin-bottom: 1rem;
 }
 
@@ -682,4 +671,78 @@ section {
     font-size: 3rem;
   }
 }
+/* Photo Section - Style moderne avec effet parallaxe */
+.photo-section {
+  background-color: var(--background-color); /* Fond clair */
+  padding: 6rem 2rem;
+  text-align: center;
+  position: relative;
+}
 
+.carousel-background {
+  background: linear-gradient(90deg, var(--primary-light), var(--secondary)); /* Dégradé entre bleu clair et émeraude */
+  padding: 4rem 2rem;
+  border-radius: 20px;
+  box-shadow: var(--shadow-md);
+}
+
+.photo-section h2 {
+  font-size: 2.5rem;
+  color: var(--white); /* Texte blanc pour contraste */
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.carousel-container {
+  display: flex;
+  justify-content: space-around;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+.carousel-item {
+  background: var(--card-color); /* Carte avec fond blanc */
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: var(--shadow-sm);
+  width: 250px;
+  text-align: center;
+  transition: var(--transition);
+  
+}
+
+.carousel-item:hover {
+  transform: translateY(-10px);
+  box-shadow: var(--shadow-lg);
+}
+
+.carousel-item i {
+  font-size: 3rem;
+  color: var(--primary); /* Icônes en bleu violet profond */
+  margin-bottom: 1.5rem;
+}
+
+.carousel-item h3 {
+  font-size: 1.5rem;
+  color: var(--primary); /* Titre en bleu violet profond */
+  margin-bottom: 1rem;
+}
+
+.carousel-item p {
+  font-size: 1rem;
+  color: var(--text-light); /* Texte clair pour les descriptions */
+}
+
+/* Responsive Design for the carousel */
+@media (max-width: 768px) {
+  .carousel-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .carousel-item {
+    width: 100%;
+    max-width: 350px;
+    margin-bottom: 2rem;
+  }
+}

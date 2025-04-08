@@ -1,12 +1,19 @@
 "use client"
 
-import { useRef } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 import "../home.css"
 
 const Home = () => {
   const navigate = useNavigate()
+  const [position, setPosition] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
   const trainRef = useRef(null)
+  const autoPlayRef = useRef(null)
+  const pauseTimeoutRef = useRef(null)
+
+  // Intervalle de déplacement en millisecondes (5 secondes)
+  const autoPlayInterval = 5000
 
   const testimonials = [
     {
@@ -36,9 +43,6 @@ const Home = () => {
     },
   ]
 
-  // Dupliquer les témoignages pour créer un effet de défilement infini
-  const duplicatedTestimonials = [...testimonials, ...testimonials]
-
   const coaches = [
     {
       id: 1,
@@ -63,6 +67,135 @@ const Home = () => {
     },
   ]
 
+  // Calculer le nombre total de positions possibles
+  const calculateMaxPosition = () => {
+    if (!trainRef.current) return 0
+
+    const trainWidth = trainRef.current.scrollWidth
+    const containerWidth = trainRef.current.parentElement.clientWidth
+    const maxScroll = trainWidth - containerWidth
+
+    // Diviser en étapes pour un défilement plus fluide
+    return Math.max(0, Math.floor(maxScroll / 380))
+  }
+
+  // Fonction pour déplacer le train vers la droite
+  const moveNext = () => {
+    const maxPosition = calculateMaxPosition()
+    if (position < maxPosition) {
+      setPosition(position + 1)
+    } else {
+      // Retour au début avec une animation spéciale
+      resetToStart()
+    }
+    pauseAutoPlay()
+  }
+
+  // Fonction pour déplacer le train vers la gauche
+  const movePrev = () => {
+    if (position > 0) {
+      setPosition(position - 1)
+    } else {
+      // Aller à la fin avec une animation spéciale
+      jumpToEnd()
+    }
+    pauseAutoPlay()
+  }
+
+  // Fonction pour revenir au début avec une animation
+  const resetToStart = () => {
+    // Animation spéciale pour revenir au début
+    if (trainRef.current) {
+      trainRef.current.style.transition = "none"
+      setPosition(0)
+      setTimeout(() => {
+        if (trainRef.current) {
+          trainRef.current.style.transition = "transform 0.8s cubic-bezier(0.25, 1, 0.5, 1)"
+        }
+      }, 50)
+    }
+  }
+
+  // Fonction pour aller à la fin avec une animation
+  const jumpToEnd = () => {
+    const maxPosition = calculateMaxPosition()
+    if (trainRef.current) {
+      trainRef.current.style.transition = "none"
+      setPosition(maxPosition)
+      setTimeout(() => {
+        if (trainRef.current) {
+          trainRef.current.style.transition = "transform 0.8s cubic-bezier(0.25, 1, 0.5, 1)"
+        }
+      }, 50)
+    }
+  }
+
+  // Fonction pour mettre en pause temporairement le défilement automatique
+  const pauseAutoPlay = () => {
+    setIsPaused(true)
+
+    // Nettoyer tout timeout existant
+    if (pauseTimeoutRef.current) {
+      clearTimeout(pauseTimeoutRef.current)
+    }
+
+    // Reprendre après 10 secondes d'inactivité
+    pauseTimeoutRef.current = setTimeout(() => {
+      setIsPaused(false)
+    }, 10000)
+  }
+
+  // Mettre à jour la position du train lorsque position change
+  useEffect(() => {
+    if (trainRef.current) {
+      const translateX = position * -380 // 380px est la largeur d'une carte + gap
+      trainRef.current.style.transform = `translateX(${translateX}px)`
+
+      // Mettre à jour la barre de progression
+      const progressBar = document.querySelector(".train-progress-bar")
+      if (progressBar) {
+        const maxPosition = calculateMaxPosition()
+        const progressPercent = maxPosition > 0 ? (position / maxPosition) * 100 : 0
+        progressBar.style.width = `${progressPercent}%`
+      }
+    }
+  }, [position])
+
+  // Mettre en place le défilement automatique
+  useEffect(() => {
+    const startAutoPlay = () => {
+      autoPlayRef.current = setInterval(() => {
+        if (!isPaused) {
+          moveNext()
+        }
+      }, autoPlayInterval)
+    }
+
+    startAutoPlay()
+
+    // Nettoyage lors du démontage du composant
+    return () => {
+      if (autoPlayRef.current) {
+        clearInterval(autoPlayRef.current)
+      }
+      if (pauseTimeoutRef.current) {
+        clearTimeout(pauseTimeoutRef.current)
+      }
+    }
+  }, [isPaused, position])
+
+  // Gestionnaires d'événements pour pause au survol
+  const handleMouseEnter = () => {
+    setIsPaused(true)
+  }
+
+  const handleMouseLeave = () => {
+    // Reprendre après 2 secondes
+    setTimeout(() => {
+      setIsPaused(false)
+    }, 2000)
+  }
+
   return (
     <div className="home-container">
       {/* Header Section */}
@@ -77,16 +210,30 @@ const Home = () => {
         </button>
       </header>
 
-      {/* Image à demi-écran avec flou */}
       <section className="photo-section">
-        <div className="image-background">
-          <img
-            src="https://www.pnl.ch/wp-content/uploads/2018/10/comprendre-metier-coach.jpg"
-            alt="Coaching de vie - Accompagnement personnalisé"
-            className="halfscreen-image"
-          />
-        </div>
-      </section>
+  <div className="carousel-background">
+    <h2>Nos Services</h2>
+    <div className="carousel-container">
+      <div className="carousel-item">
+        <i className="fas fa-users"></i>
+        <h3>Coaching en Groupe</h3>
+        <p>Participez à des sessions de coaching en groupe pour échanger et apprendre avec d'autres.</p>
+      </div>
+      <div className="carousel-item">
+        <i className="fas fa-briefcase"></i>
+        <h3>Coaching Professionnel</h3>
+        <p>Ayez un accompagnement personnalisé pour vos objectifs professionnels.</p>
+      </div>
+      <div className="carousel-item">
+        <i className="fas fa-heart"></i>
+        <h3>Coaching Personnel</h3>
+        <p>Obtenez un soutien pour votre développement personnel et atteindre un équilibre de vie.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
 
       <section className="about">
         <h2>Qu'est-ce que notre plateforme de coaching ?</h2>
@@ -104,17 +251,28 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Testimonial Section avec défilement automatique */}
+      {/* Testimonial Section avec effet Train */}
       <section id="testimonials" className="testimonials">
         <h2>Avis de nos clients</h2>
-        <div className="testimonial-container">
+        <div className="testimonial-container" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
           <div className="testimonial-train" ref={trainRef}>
-            {duplicatedTestimonials.map((item, index) => (
-              <div key={`${item.id}-${index}`} className="testimonial-card">
+            {testimonials.map((item) => (
+              <div key={item.id} className="testimonial-card">
                 <p className="testimonial-text">"{item.text}"</p>
                 <p className="testimonial-name">- {item.name}</p>
               </div>
             ))}
+          </div>
+          <div className="train-controls">
+            <button className="train-arrow" onClick={movePrev}>
+              ←
+            </button>
+            <div className="train-progress">
+              <div className="train-progress-bar"></div>
+            </div>
+            <button className="train-arrow" onClick={moveNext}>
+              →
+            </button>
           </div>
         </div>
       </section>

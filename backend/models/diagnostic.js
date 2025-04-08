@@ -1,39 +1,56 @@
-const mongoose = require("mongoose");
+const mongoose = require("mongoose")
 
-// Définir le schéma du diagnostic
-const DiagnosticSchema = new mongoose.Schema({
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
+const DiagnosticSchema = new mongoose.Schema(
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    userName: {
+      type: String,
+    },
+    diagnostic: {
+      type: String,
+      required: true,
+    },
+    date: {
+      type: Date,
+      default: Date.now,
+    },
+    responses: {
+      type: Object,
+    },
+    aiAnalysis: {
+      stressLevel: String,
+      confidenceLevel: String,
+      motivationLevel: String,
+      aiDiagnostic: String,
+    },
+    coachNotes: {
+      type: String,
+    },
+    coachValidation: {
+      isValid: Boolean,
+      coachNotes: String,
+      validationDate: Date,
+    },
+    comments: [
+      {
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+        },
+        userName: String,
+        text: String,
+        date: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
   },
-  diagnostic: {
-    type: String,
-    required: true,
-  },
-  responses: {
-    type: Object,
-    required: true,
-  },
-  status: {
-    type: String,
-    enum: ["pending", "approved", "modified"],
-    default: "pending",
-  },
-  reviewedBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-  },
-  comments: {
-    type: String,
-  },
-  originalDiagnostic: {
-    type: String,
-  },
-  date: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  { timestamps: true },
+)
 
-module.exports = mongoose.model("Diagnostic", DiagnosticSchema);
+module.exports = mongoose.model("Diagnostic", DiagnosticSchema)

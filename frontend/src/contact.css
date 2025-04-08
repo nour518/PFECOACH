@@ -1,136 +1,133 @@
-/* contact.css */
-
-/* ===== BASE STYLES ===== */
+/* Container principal du formulaire de contact */
 .contact-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 4rem 2rem;
-  font-family: 'Inter', sans-serif;
-  color: #1f2937;
+  padding: 4rem 3rem;
+  background-color: var(--white);
+  border-radius: 20px;
+  box-shadow: var(--shadow-lg);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
-/* ===== HEADER SECTION ===== */
+.contact-container:hover {
+  transform: translateY(-5px); /* Animation au survol du conteneur */
+  box-shadow: var(--shadow-xl); /* Effet de profondeur lors du survol */
+}
+
+/* Header du formulaire de contact */
 .contact-header {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 2.5rem;
+  opacity: 0;
+  animation: fadeIn 1s forwards 0.3s; /* Animation d'apparition du header */
 }
 
 .contact-header h2 {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #4f46e5;
-  position: relative;
-  display: inline-block;
-  padding-bottom: 1rem;
+  font-size: 3rem;
+  color: var(--primary-color);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  line-height: 1.2;
 }
 
-.contact-header h2::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80px;
-  height: 4px;
-  background: linear-gradient(to right, #4f46e5, #a855f7);
-  border-radius: 2px;
-}
-
-/* ===== CONTACT DETAILS SECTION ===== */
+/* Détails du contact */
 .contact-details {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 3rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2.5rem;
   margin-bottom: 4rem;
 }
 
 .contact-info {
-  background: #ffffff;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
+  background-color: var(--background-alt);
+  padding: 2.5rem;
+  border-radius: 15px;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  opacity: 0;
+  animation: slideUp 0.8s forwards; /* Animation de montée */
+}
+
+.contact-info:nth-child(1) {
+  animation-delay: 0.5s; /* Délai pour chaque élément */
+}
+
+.contact-info:nth-child(2) {
+  animation-delay: 0.7s;
 }
 
 .contact-info:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-5px); /* Élève légèrement la carte au survol */
 }
 
 .contact-info h3 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #4f46e5;
+  font-size: 1.8rem;
+  color: var(--primary-dark);
   margin-bottom: 1rem;
-  position: relative;
-  padding-left: 1.5rem;
-}
-
-.contact-info h3::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 8px;
-  height: 8px;
-  background: #a855f7;
-  border-radius: 50%;
+  text-transform: capitalize;
 }
 
 .contact-info p {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  color: #4b5563;
-  margin-bottom: 1.5rem;
+  font-size: 1.2rem;
+  color: var(--text-color);
+  line-height: 1.7;
+  margin-bottom: 0.5rem;
 }
 
-/* ===== MAP SECTION ===== */
+/* Style de la carte */
 .contact-map {
-  margin-top: 3rem;
-  position: relative;
-  border-radius: 12px;
+  margin-top: 4rem;
+}
+
+.contact-map .google-map {
+  border-radius: 15px;
   overflow: hidden;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+  width: 100%;
+  height: 400px;
+  box-shadow: var(--shadow-lg);
+  animation: fadeIn 1.5s forwards 1s; /* Animation pour la carte */
 }
 
-.contact-map:hover {
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+/* Animation d'apparition */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
-/* Custom Google Maps styling */
-.gm-style .gm-style-iw-c {
-  border-radius: 8px !important;
-  padding: 1rem !important;
+/* Animation de montée pour les éléments */
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.gm-style .gm-style-iw-t::after {
-  background: #4f46e5 !important;
-}
-
-/* ===== RESPONSIVE DESIGN ===== */
+/* Responsive Design */
 @media (max-width: 768px) {
-  .contact-container {
-    padding: 3rem 1.5rem;
-  }
-  
-  .contact-header h2 {
-    font-size: 2rem;
-  }
-  
   .contact-details {
     grid-template-columns: 1fr;
     gap: 2rem;
   }
-}
 
-@media (max-width: 480px) {
-  .contact-header h2 {
-    font-size: 1.8rem;
-  }
-  
   .contact-info {
-    padding: 1.5rem;
+    text-align: center;
+  }
+
+  .contact-header h2 {
+    font-size: 2.4rem;
+  }
+
+  .contact-map .google-map {
+    height: 350px;
   }
 }

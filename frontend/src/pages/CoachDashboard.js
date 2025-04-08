@@ -1,42 +1,42 @@
-import { useState, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
-import "../coachdashbord.css"
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "../coachdashbord.css";
 
 const CoachDashboard = () => {
-  const [users, setUsers] = useState([])
-  const [diagnostics, setDiagnostics] = useState([])
-  const [selectedUser, setSelectedUser] = useState(null)
-  const [userDiagnostics, setUserDiagnostics] = useState([])
-  const [activeTab, setActiveTab] = useState("users")
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [actionPlans, setActionPlans] = useState([])
-  const [newDiagnostic, setNewDiagnostic] = useState("")
+  const [users, setUsers] = useState([]);
+  const [diagnostics, setDiagnostics] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [userDiagnostics, setUserDiagnostics] = useState([]);
+  const [activeTab, setActiveTab] = useState("users");
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [actionPlans, setActionPlans] = useState([]);
+  const [newDiagnostic, setNewDiagnostic] = useState("");
   const [newActionPlan, setNewActionPlan] = useState({
     title: "",
     description: "",
     deadline: "",
     status: "pending"
-  })
-  const [showDiagnosticForm, setShowDiagnosticForm] = useState(false)
-  const [showActionPlanForm, setShowActionPlanForm] = useState(false)
-  const navigate = useNavigate()
+  });
+  const [showDiagnosticForm, setShowDiagnosticForm] = useState(false);
+  const [showActionPlanForm, setShowActionPlanForm] = useState(false);
+  const navigate = useNavigate();
 
-  const token = localStorage.getItem("token")
-  const user = JSON.parse(localStorage.getItem("user"))
+  const token = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
     if (!token || !user || user.role !== "coach") {
-      navigate("/login")
-      return
+      navigate("/login");
+      return;
     }
-    fetchData()
-  }, [token, navigate, user])
+    fetchData();
+  }, [token, navigate, user]);
 
   const fetchData = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      // Vérification si l'utilisateur est bien le coach "Sadek"
+      // Pour l'exemple, si le coach est "Sadek", on utilise des données mock
       if (user && user.email === "sadek21@gmail.com") {
         const mockUsers = [
           { 
@@ -80,7 +80,7 @@ const CoachDashboard = () => {
             subscriptionStatus: "active",
             testResponses: []
           },
-        ]
+        ];
 
         const mockDiagnostics = [
           {
@@ -113,7 +113,7 @@ const CoachDashboard = () => {
             },
             coachNotes: "Proposer une séance sur la fixation d'objectifs SMART"
           },
-        ]
+        ];
 
         const mockActionPlans = [
           {
@@ -143,104 +143,83 @@ const CoachDashboard = () => {
             status: "not-started",
             progressUpdates: []
           }
-        ]
+        ];
 
-        setUsers(mockUsers)
-        setDiagnostics(mockDiagnostics)
-        setActionPlans(mockActionPlans)
-        return
+        setUsers(mockUsers);
+        setDiagnostics(mockDiagnostics);
+        setActionPlans(mockActionPlans);
+        setIsLoading(false);
+        return;
       }
 
-      // Si ce n'est pas "Sadek", récupérer les données à partir du serveur
+      // Si le coach n'est pas "Sadek", récupérer les données depuis le serveur
       const usersResponse = await fetch("http://localhost:5002/api/coach/users", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-
-      if (!usersResponse.ok) throw new Error("Erreur lors de la récupération des utilisateurs")
-      const usersData = await usersResponse.json()
-      setUsers(usersData)
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!usersResponse.ok) throw new Error("Erreur lors de la récupération des utilisateurs");
+      const usersData = await usersResponse.json();
+      setUsers(usersData);
 
       const diagnosticsResponse = await fetch("http://localhost:5002/api/coach/diagnostics", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-
-      if (!diagnosticsResponse.ok) throw new Error("Erreur lors de la récupération des diagnostics")
-      const diagnosticsData = await diagnosticsResponse.json()
-      setDiagnostics(diagnosticsData)
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!diagnosticsResponse.ok) throw new Error("Erreur lors de la récupération des diagnostics");
+      const diagnosticsData = await diagnosticsResponse.json();
+      setDiagnostics(diagnosticsData);
 
       const actionPlansResponse = await fetch("http://localhost:5002/api/coach/action-plans", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-
+        headers: { Authorization: `Bearer ${token}` },
+      });
       if (actionPlansResponse.ok) {
-        const actionPlansData = await actionPlansResponse.json()
-        setActionPlans(actionPlansData)
+        const actionPlansData = await actionPlansResponse.json();
+        setActionPlans(actionPlansData);
       }
-
     } catch (err) {
-      setError(err.message)
-      console.error("Erreur:", err)
+      setError(err.message);
+      console.error("Erreur:", err);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleUserSelect = async (userId) => {
-    setSelectedUser(userId)
-    setIsLoading(true)
+    setSelectedUser(userId);
+    setIsLoading(true);
     try {
       if (user && user.email === "sadek21@gmail.com") {
-        // Mock des données pour le coach "Sadek"
-        const mockUserDiagnostics = diagnostics.filter((diag) => diag.userId === userId)
-        setUserDiagnostics(mockUserDiagnostics)
-        
-        const mockUserActionPlans = actionPlans.filter((plan) => plan.userId === userId)
-        setActionPlans(mockUserActionPlans)
-        
-        setIsLoading(false)
-        return
-      }
+        const mockUserDiagnostics = diagnostics.filter((diag) => diag.userId === userId);
+        setUserDiagnostics(mockUserDiagnostics);
 
+        const mockUserActionPlans = actionPlans.filter((plan) => plan.userId === userId);
+        setActionPlans(mockUserActionPlans);
+        setIsLoading(false);
+        return;
+      }
       const [diagnosticsResponse, actionPlansResponse] = await Promise.all([
         fetch(`http://localhost:5002/api/coach/diagnostics/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }),
         fetch(`http://localhost:5002/api/coach/action-plans/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-      ])
-
-      if (!diagnosticsResponse.ok) throw new Error("Erreur lors de la récupération des diagnostics de l'utilisateur")
-      const diagnosticsData = await diagnosticsResponse.json()
-      setUserDiagnostics(diagnosticsData)
-
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+      ]);
+      if (!diagnosticsResponse.ok) throw new Error("Erreur lors de la récupération des diagnostics de l'utilisateur");
+      const diagnosticsData = await diagnosticsResponse.json();
+      setUserDiagnostics(diagnosticsData);
       if (actionPlansResponse.ok) {
-        const actionPlansData = await actionPlansResponse.json()
-        setActionPlans(actionPlansData)
+        const actionPlansData = await actionPlansResponse.json();
+        setActionPlans(actionPlansData);
       }
-
     } catch (err) {
-      setError(err.message)
-      console.error("Erreur:", err)
+      setError(err.message);
+      console.error("Erreur:", err);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const validateAIResponse = (userId, testId, isValid, coachNotes) => {
-    // Envoyer la validation au serveur
-    console.log(`Validation pour user ${userId}, test ${testId}:`, isValid, coachNotes)
-    // Mise à jour locale pour l'exemple
+    console.log(`Validation pour user ${userId}, test ${testId}:`, isValid, coachNotes);
     const updatedUsers = users.map(u => {
       if (u._id === userId) {
         const updatedResponses = u.testResponses.map(res => {
@@ -252,21 +231,19 @@ const CoachDashboard = () => {
                 coachNotes,
                 validationDate: new Date().toISOString()
               }
-            }
+            };
           }
-          return res
-        })
-        return {...u, testResponses: updatedResponses}
+          return res;
+        });
+        return { ...u, testResponses: updatedResponses };
       }
-      return u
-    })
-    setUsers(updatedUsers)
-  }
+      return u;
+    });
+    setUsers(updatedUsers);
+  };
 
   const submitDiagnostic = (userId) => {
-    // Envoyer le nouveau diagnostic au serveur
-    console.log(`Nouveau diagnostic pour user ${userId}:`, newDiagnostic)
-    // Mise à jour locale pour l'exemple
+    console.log(`Nouveau diagnostic pour user ${userId}:`, newDiagnostic);
     const newDiag = {
       _id: `diag-new-${Date.now()}`,
       userId,
@@ -275,17 +252,15 @@ const CoachDashboard = () => {
       date: new Date(),
       coachNotes: "",
       aiAnalysis: {}
-    }
-    setUserDiagnostics([...userDiagnostics, newDiag])
-    setDiagnostics([...diagnostics, newDiag])
-    setNewDiagnostic("")
-    setShowDiagnosticForm(false)
-  }
+    };
+    setUserDiagnostics([...userDiagnostics, newDiag]);
+    setDiagnostics([...diagnostics, newDiag]);
+    setNewDiagnostic("");
+    setShowDiagnosticForm(false);
+  };
 
   const submitActionPlan = (userId) => {
-    // Envoyer le nouveau plan d'action au serveur
-    console.log(`Nouveau plan d'action pour user ${userId}:`, newActionPlan)
-    // Mise à jour locale pour l'exemple
+    console.log(`Nouveau plan d'action pour user ${userId}:`, newActionPlan);
     const newPlan = {
       _id: `plan-new-${Date.now()}`,
       userId,
@@ -293,46 +268,40 @@ const CoachDashboard = () => {
       ...newActionPlan,
       createdDate: new Date(),
       progressUpdates: []
-    }
-    setActionPlans([...actionPlans, newPlan])
+    };
+    setActionPlans([...actionPlans, newPlan]);
     setNewActionPlan({
       title: "",
       description: "",
       deadline: "",
       status: "pending"
-    })
-    setShowActionPlanForm(false)
-  }
+    });
+    setShowActionPlanForm(false);
+  };
 
   const addProgressUpdate = (planId, update) => {
-    // Envoyer la mise à jour au serveur
-    console.log(`Mise à jour pour plan ${planId}:`, update)
-    // Mise à jour locale pour l'exemple
+    console.log(`Mise à jour pour plan ${planId}:`, update);
     const updatedPlans = actionPlans.map(plan => {
       if (plan._id === planId) {
         return {
           ...plan,
           progressUpdates: [
             ...plan.progressUpdates,
-            {
-              date: new Date().toISOString(),
-              note: update
-            }
+            { date: new Date().toISOString(), note: update }
           ]
-        }
+        };
       }
-      return plan
-    })
-    setActionPlans(updatedPlans)
-  }
+      return plan;
+    });
+    setActionPlans(updatedPlans);
+  };
 
-  if (isLoading) return <div className="loading">Chargement...</div>
-  if (error) return <div className="error-message">{error}</div>
+  if (isLoading) return <div className="loading">Chargement...</div>;
+  if (error) return <div className="error-message">{error}</div>;
 
   return (
     <div className="coach-dashboard">
       <h1>Tableau de Bord Coach</h1>
-
       <div className="dashboard-tabs">
         <button className={`tab-button ${activeTab === "users" ? "active" : ""}`} onClick={() => setActiveTab("users")}>
           Utilisateurs
@@ -352,16 +321,16 @@ const CoachDashboard = () => {
             <div className="users-list">
               <h3>Abonnés ({users.length})</h3>
               <ul>
-                {users.map((user) => (
+                {users.map((usr) => (
                   <li
-                    key={user._id}
-                    className={selectedUser === user._id ? "selected" : ""}
-                    onClick={() => handleUserSelect(user._id)}
+                    key={usr._id}
+                    className={selectedUser === usr._id ? "selected" : ""}
+                    onClick={() => handleUserSelect(usr._id)}
                   >
-                    <strong>{user.name}</strong> - {user.email}
+                    <strong>{usr.name}</strong> - {usr.email}
                     <div className="user-meta">
-                      <span>Abonnement: {user.subscriptionStatus || 'active'}</span>
-                      <span>Depuis: {new Date(user.subscriptionDate || '2023-01-01').toLocaleDateString()}</span>
+                      <span>Abonnement: {usr.subscriptionStatus || 'active'}</span>
+                      <span>Depuis: {new Date(usr.subscriptionDate || '2023-01-01').toLocaleDateString()}</span>
                     </div>
                   </li>
                 ))}
@@ -397,23 +366,23 @@ const CoachDashboard = () => {
                     <input
                       type="text"
                       value={newActionPlan.title}
-                      onChange={(e) => setNewActionPlan({...newActionPlan, title: e.target.value})}
+                      onChange={(e) => setNewActionPlan({ ...newActionPlan, title: e.target.value })}
                       placeholder="Titre"
                     />
                     <textarea
                       value={newActionPlan.description}
-                      onChange={(e) => setNewActionPlan({...newActionPlan, description: e.target.value})}
+                      onChange={(e) => setNewActionPlan({ ...newActionPlan, description: e.target.value })}
                       placeholder="Description"
                     />
                     <input
                       type="date"
                       value={newActionPlan.deadline}
-                      onChange={(e) => setNewActionPlan({...newActionPlan, deadline: e.target.value})}
+                      onChange={(e) => setNewActionPlan({ ...newActionPlan, deadline: e.target.value })}
                       placeholder="Date limite"
                     />
                     <select
                       value={newActionPlan.status}
-                      onChange={(e) => setNewActionPlan({...newActionPlan, status: e.target.value})}
+                      onChange={(e) => setNewActionPlan({ ...newActionPlan, status: e.target.value })}
                     >
                       <option value="pending">En attente</option>
                       <option value="in-progress">En cours</option>
@@ -457,15 +426,14 @@ const CoachDashboard = () => {
                                 <textarea
                                   placeholder="Notes du coach..."
                                   onChange={(e) => {
-                                    // Pour l'exemple, on met à jour directement dans le state
-                                    const updatedUsers = [...users]
-                                    const userIndex = updatedUsers.findIndex(u => u._id === selectedUser)
+                                    const updatedUsers = [...users];
+                                    const userIndex = updatedUsers.findIndex(u => u._id === selectedUser);
                                     updatedUsers[userIndex].testResponses[idx].coachValidation = {
                                       isValid: false,
                                       coachNotes: e.target.value,
                                       validationDate: new Date().toISOString()
-                                    }
-                                    setUsers(updatedUsers)
+                                    };
+                                    setUsers(updatedUsers);
                                   }}
                                 />
                               </div>
@@ -541,9 +509,9 @@ const CoachDashboard = () => {
                                 type="text"
                                 placeholder="Ajouter une note de suivi..."
                                 onKeyPress={(e) => {
-                                  if (e.key === 'Enter' && e.target.value) {
-                                    addProgressUpdate(plan._id, e.target.value)
-                                    e.target.value = ''
+                                  if (e.key === "Enter" && e.target.value) {
+                                    addProgressUpdate(plan._id, e.target.value);
+                                    e.target.value = "";
                                   }
                                 }}
                               />
@@ -640,7 +608,7 @@ const CoachDashboard = () => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default CoachDashboard
+export default CoachDashboard;

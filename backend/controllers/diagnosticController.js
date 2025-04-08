@@ -1,136 +1,290 @@
-const axios = require("axios");
-const mongoose = require("mongoose");
-const User = require("../models/User"); // Pour récupérer l'utilisateur, si nécessaire
-const Diagnostic = require("../models/Diagnostic"); // Correcte casse avec PascalCase
+const Diagnostic = require("../models/Diagnostic")
+const User = require("../models/User")
+const mongoose = require("mongoose")
 
-// Fonction pour obtenir un diagnostic de test à partir de Gemini
-const getGeminiDiagnostic = async (req, res) => {
+// @desc    Créer un diagnostic
+// @route   POST /api/diagnostics
+// @access  Private (Coach)
+exports.createDiagnostic = async (req, res) => {
   try {
-    const { userId, testData } = req.body;
+    const { userId, diagnostic, responses, aiAnalysis } = req.body
 
-    // Vérifier la présence des données requises
-    if (!userId || !testData) {
+    if (!userId || !diagnostic) {
       return res.status(400).json({
-        status: "error",
-        message: "L'ID utilisateur et les données du test sont requis",
-      });
+        success: false,
+        message: "Veuillez fournir l'ID de l'utilisateur et le diagnostic",
+      })
     }
 
-    // Vérifier si l'ID utilisateur est valide
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-      return res.status(400).json({
-        status: "error",
-        message: "ID utilisateur invalide",
-      });
+    // Vérifier si l'utilisateur existe
+    const user = await User.findById(userId)
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "Utilisateur non trouvé",
+      })
     }
 
-    // Appel API Gemini (Vérifier si l'URL et la clé API sont correctes)
-    const response = await axios.post("https://api.gemini.com/v1/diagnostic", {
-      apiKey: process.env.GEMINI_API_KEY, // Assurez-vous que cette clé API est définie
-      testData,
-    });
+    // Créer le diagnostic
+    const newDiagnostic = await Diagnostic.create({
+      userId,
+      userName: user.name,
+      diagnostic,
+      responses: responses || {},
+      aiAnalysis: aiAnalysis || {},
+      coachNotes: "",
+    })
 
-    // Récupération du résultat du diagnostic
-    const diagnosticResult = response.data;
+    // Mettre à jour le diagnostic de l'utilisateur
+    user.diagnostic = diagnostic
+    await user.save()
+
+    res.status(201).json({
+      success: true,
+      message: "Diagnostic créé avec succès",
+      data: newDiagnostic,
+    })
+  } catch (error) {
+    console.error("Erreur lors de la création du diagnostic:", error)
+    res.status(500).json({
+      success: false,
+      message: "Erreur lors de la création du diagnostic",
+      error: error.message,
+    })
+  }
+}
+
+// @desc    Obtenir tous les diagnostics d'un utilisateur
+// @route   GET /api/diagnostics/user/:userId
+// @access  Private
+exports.getUserDiagnostics = async (req, res) => {
+  try {
+    const { userId } = req.params
+
+    // Vérifier si l'utilisateur a le droit d'accéder à ces diagnostics
+    if (req.user.role !== "coach" && req.user._id.toString() !== userId) {
+      return res.status(403).json({
+        success: false,
+        message: "Non autorisé à accéder à ces diagnostics",
+      })
+    }
+
+    const diagnostics = await Diagnostic.find({ userId }).sort({ date: -1 })
 
     res.status(200).json({
-      status: "success",
-      diagnostic: diagnosticResult,
-    });
+      success: true,
+      count: diagnostics.length,
+      data: diagnostics,
+    })
   } catch (error) {
-    console.error("Erreur lors de la récupération du diagnostic Gemini:", error);
+    console.error("Erreur lors de la récupération des diagnostics:", error)
     res.status(500).json({
-      status: "error",
-      message: "Erreur lors de la récupération du diagnostic Gemini",
+      success: false,
+      message: "Erreur lors de la récupération des diagnostics",
       error: error.message,
-    });
+    })
   }
-};
+}
 
-// Récupérer le diagnostic d'un utilisateur
-const getDiagnostic = async (req, res) => {
+// @desc    Obtenir un diagnostic spécifique
+// @route   GET /api/diagnostics/:id
+// @access  Private
+exports.getDiagnostic = async (req, res) => {
   try {
-    const { userId } = req.params;
-
-    // Vérifier si l'ID est valide
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-      return res.status(400).json({
-        status: "error",
-        message: "ID utilisateur invalide",
-      });
-    }
-
-    // Récupérer le diagnostic le plus récent de l'utilisateur
-    const diagnostic = await Diagnostic.findOne({ userId }).sort({ date: -1 });
+    const diagnostic = await Diagnostic.findById(req.params.id)
 
     if (!diagnostic) {
       return res.status(404).json({
-        status: "error",
-        message: "Aucun diagnostic trouvé pour cet utilisateur.",
-      });
+        success: false,
+        message: "Diagnostic non trouvé",
+      })
+    }
+
+    // Vérifier si l'utilisateur a le droit d'accéder à ce diagnostic
+    if (req.user.role !== "coach" && req.user._id.toString() !== diagnostic.userId.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: "Non autorisé à accéder à ce diagnostic",
+      })
     }
 
     res.status(200).json({
-      status: "success",
-      diagnostic,
-    });
+      success: true,
+      data: diagnostic,
+    })
   } catch (error) {
-    console.error("Erreur lors de la récupération du diagnostic:", error);
+    console.error("Erreur lors de la récupération du diagnostic:", error)
     res.status(500).json({
-      status: "error",
-      message: "Erreur interne lors de la récupération du diagnostic.",
+      success: false,
+      message: "Erreur lors de la récupération du diagnostic",
       error: error.message,
-    });
+    })
   }
-};
+}
 
-// Créer un nouveau diagnostic
-const createDiagnostic = async (req, res) => {
+// @desc    Mettre à jour un diagnostic
+// @route   PUT /api/diagnostics/:id
+// @access  Private (Coach)
+exports.updateDiagnostic = async (req, res) => {
   try {
-    const { userId, responses, diagnostic } = req.body;
+    const { diagnostic, coachNotes, aiAnalysis, coachValidation } = req.body
 
-    // Vérifier si l'ID est valide
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-      return res.status(400).json({
-        status: "error",
-        message: "ID utilisateur invalide",
-      });
+    // Vérifier si l'utilisateur est un coach
+    if (req.user.role !== "coach") {
+      return res.status(403).json({
+        success: false,
+        message: "Seuls les coachs peuvent mettre à jour les diagnostics",
+      })
     }
 
-    // Vérifier si les données requises sont présentes
-    if (!responses || !diagnostic) {
-      return res.status(400).json({
-        status: "error",
-        message: "Les réponses et le diagnostic sont requis",
-      });
+    const updatedDiagnostic = await Diagnostic.findByIdAndUpdate(
+      req.params.id,
+      {
+        ...(diagnostic && { diagnostic }),
+        ...(coachNotes && { coachNotes }),
+        ...(aiAnalysis && { aiAnalysis }),
+        ...(coachValidation && { coachValidation }),
+      },
+      { new: true, runValidators: true },
+    )
+
+    if (!updatedDiagnostic) {
+      return res.status(404).json({
+        success: false,
+        message: "Diagnostic non trouvé",
+      })
     }
 
-    // Création du diagnostic
-    const newDiagnostic = new Diagnostic({
-      userId,
-      responses,
-      diagnostic,
-    });
+    // Si le diagnostic a été mis à jour, mettre à jour également l'utilisateur
+    if (diagnostic) {
+      await User.findByIdAndUpdate(updatedDiagnostic.userId, { diagnostic })
+    }
 
-    await newDiagnostic.save();
-
-    res.status(201).json({
-      status: "success",
-      diagnostic: newDiagnostic,
-    });
+    res.status(200).json({
+      success: true,
+      message: "Diagnostic mis à jour avec succès",
+      data: updatedDiagnostic,
+    })
   } catch (error) {
-    console.error("Erreur lors de la création du diagnostic:", error);
+    console.error("Erreur lors de la mise à jour du diagnostic:", error)
     res.status(500).json({
-      status: "error",
-      message: "Erreur interne lors de la création du diagnostic.",
+      success: false,
+      message: "Erreur lors de la mise à jour du diagnostic",
       error: error.message,
-    });
+    })
   }
-};
+}
 
-// Exporter les contrôleurs
-module.exports = {
-  getGeminiDiagnostic,
-  getDiagnostic,
-  createDiagnostic,
-};
+// @desc    Supprimer un diagnostic
+// @route   DELETE /api/diagnostics/:id
+// @access  Private (Coach)
+exports.deleteDiagnostic = async (req, res) => {
+  try {
+    // Vérifier si l'utilisateur est un coach
+    if (req.user.role !== "coach") {
+      return res.status(403).json({
+        success: false,
+        message: "Seuls les coachs peuvent supprimer les diagnostics",
+      })
+    }
+
+    const diagnostic = await Diagnostic.findByIdAndDelete(req.params.id)
+
+    if (!diagnostic) {
+      return res.status(404).json({
+        success: false,
+        message: "Diagnostic non trouvé",
+      })
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Diagnostic supprimé avec succès",
+    })
+  } catch (error) {
+    console.error("Erreur lors de la suppression du diagnostic:", error)
+    res.status(500).json({
+      success: false,
+      message: "Erreur lors de la suppression du diagnostic",
+      error: error.message,
+    })
+  }
+}
+
+// @desc    Obtenir tous les diagnostics (pour les coachs)
+// @route   GET /api/diagnostics
+// @access  Private (Coach)
+exports.getAllDiagnostics = async (req, res) => {
+  try {
+    // Vérifier si l'utilisateur est un coach
+    if (req.user.role !== "coach") {
+      return res.status(403).json({
+        success: false,
+        message: "Seuls les coachs peuvent voir tous les diagnostics",
+      })
+    }
+
+    const diagnostics = await Diagnostic.find().sort({ date: -1 })
+
+    res.status(200).json({
+      success: true,
+      count: diagnostics.length,
+      data: diagnostics,
+    })
+  } catch (error) {
+    console.error("Erreur lors de la récupération des diagnostics:", error)
+    res.status(500).json({
+      success: false,
+      message: "Erreur lors de la récupération des diagnostics",
+      error: error.message,
+    })
+  }
+}
+
+// @desc    Valider l'analyse IA d'un diagnostic
+// @route   PUT /api/diagnostics/:id/validate
+// @access  Private (Coach)
+exports.validateDiagnostic = async (req, res) => {
+  try {
+    const { isValid, coachNotes } = req.body
+
+    // Vérifier si l'utilisateur est un coach
+    if (req.user.role !== "coach") {
+      return res.status(403).json({
+        success: false,
+        message: "Seuls les coachs peuvent valider les diagnostics",
+      })
+    }
+
+    const diagnostic = await Diagnostic.findById(req.params.id)
+
+    if (!diagnostic) {
+      return res.status(404).json({
+        success: false,
+        message: "Diagnostic non trouvé",
+      })
+    }
+
+    // Mettre à jour la validation
+    diagnostic.coachValidation = {
+      isValid,
+      coachNotes,
+      validationDate: new Date(),
+    }
+
+    await diagnostic.save()
+
+    res.status(200).json({
+      success: true,
+      message: "Diagnostic validé avec succès",
+      data: diagnostic,
+    })
+  } catch (error) {
+    console.error("Erreur lors de la validation du diagnostic:", error)
+    res.status(500).json({
+      success: false,
+      message: "Erreur lors de la validation du diagnostic",
+      error: error.message,
+    })
+  }
+}

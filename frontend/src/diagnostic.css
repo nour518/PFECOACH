@@ -1,0 +1,132 @@
+/* Conteneur principal du plan d'action */
+.plan-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: var(--white);
+    border-radius: 12px;
+    box-shadow: var(--shadow-md);
+    font-family: 'Roboto', sans-serif;
+    color: var(--text-color);
+  }
+  
+  /* Titre du plan d'action */
+  .plan-container h2 {
+    font-size: 2.6rem;
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  
+  /* Table responsive */
+  .table-responsive {
+    overflow-x: auto;
+  }
+  
+  /* Style de la table */
+  .modern-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+  }
+  
+  .modern-table th,
+  .modern-table td {
+    padding: 1rem 1.5rem;
+    text-align: center;
+    border: 1px solid var(--border-color);
+    font-size: 1.1rem;
+  }
+  
+  .modern-table th {
+    background-color: var(--primary-light);
+    color: var(--white);
+    font-weight: 500;
+  }
+  
+  .modern-table td {
+    background-color: var(--background-alt);
+    color: var(--text-color);
+    font-weight: 300;
+  }
+  
+  .modern-table tbody tr:nth-child(even) td {
+    background-color: var(--background-color);
+  }
+  
+  .modern-table tbody tr:hover {
+    background-color: var(--primary-light);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease-in-out;
+  }
+  
+  /* Effet de survol sur les cases à cocher */
+  .checkbox-cell input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    border-radius: 5px;
+  }
+  
+  .checkbox-cell input[type="checkbox"]:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    transform: scale(1.2);
+  }
+  
+  /* Champ d'évaluation */
+  .evaluation-cell input[type="text"] {
+    width: 90%;
+    padding: 0.8rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    color: var(--text-color);
+    background-color: var(--background-alt);
+    transition: all 0.3s ease;
+    text-align: center;
+  }
+  
+  .evaluation-cell input[type="text"]:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 6px var(--primary-color);
+  }
+  
+  .evaluation-cell input[type="text"]:hover {
+    border-color: var(--primary-dark);
+  }
+  
+  /* Animations des cases à cocher */
+  .checkbox-cell input[type="checkbox"]:checked {
+    background-color: var(--secondary);
+    transform: scale(1.1);
+  }
+  
+  .checkbox-cell input[type="checkbox"]:focus {
+    outline: none;
+    box-shadow: 0 0 5px var(--secondary);
+  }
+  
+  /* Responsivité */
+  @media (max-width: 768px) {
+    .modern-table th, .modern-table td {
+      padding: 0.8rem;
+      font-size: 1rem;
+    }
+  
+    .modern-table th {
+      font-size: 1.1rem;
+    }
+  
+    .evaluation-cell input[type="text"] {
+      width: 100%;
+      margin-top: 1rem;
+    }
+  }
+  

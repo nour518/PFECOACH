@@ -1,25 +1,4 @@
 // Middleware pour vérifier si l'utilisateur est un coach
-
-const isCoach = (req, res, next) => {
-  if (req.user && req.user.role === "coach") {
-    next()
-  } else {
-    res.status(403).json({ message: "Accès refusé. Vous devez être un coach pour accéder à cette ressource." })
-  }
-}
-
-// Middleware pour vérifier si l'utilisateur est un administrateur
-const isAdmin = (req, res, next) => {
-  if (req.user && req.user.role === "admin") {
-    next()
-  } else {
-    res.status(403).json({ message: "Accès refusé. Vous devez être un administrateur pour accéder à cette ressource." })
-  }
-}
-
-module.exports = { isCoach, isAdmin }
-
-
 exports.isCoach = (req, res, next) => {
   // L'utilisateur devrait être attaché à la requête par le middleware protect
   if (!req.user || req.user.role !== "coach") {
@@ -44,4 +23,12 @@ exports.hasRole = (roles = []) => {
     }
     next()
   }
+}
+
+// Middleware pour vérifier si l'utilisateur est un coach ou un admin
+exports.isCoachOrAdmin = (req, res, next) => {
+  if (!req.user || (req.user.role !== "coach" && req.user.role !== "admin")) {
+    return res.status(403).json({ message: "Accès refusé. Réservé aux coaches et administrateurs" })
+  }
+  next()
 }

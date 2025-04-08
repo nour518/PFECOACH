@@ -1,28 +1,25 @@
-const jwt = require("jsonwebtoken")
-const User = require("../models/User")
-const Coach = require("../models/Coach")
+const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 
 exports.protect = async (req, res, next) => {
   try {
-    const token = req.headers.authorization?.split(" ")[1]
-    if (!token) return res.status(401).json({ message: "Non autorisé" })
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET)
-
-    // Vérifier d'abord si c'est un utilisateur
-    let user = await User.findById(decoded.id)
-
-    // Si ce n'est pas un utilisateur, vérifier si c'est un coach
-    if (!user) {
-      user = await Coach.findById(decoded.id)
+    let token;
+    // Vérifie si le token est présent dans l'en-tête Authorization
+    if (
+      req.headers.authorization &&
+      req.headers.authorization.startsWith("Bearer")
+    ) {
+      token = req.headers.authorization.split(" ")[1];
     }
-
-    if (!user) return res.status(401).json({ message: "Utilisateur introuvable" })
-
-    req.user = user
-    next()
-  } catch (err) {
-    res.status(401).json({ message: "Token invalide ou expiré" })
+    if (!token) {
+      return res.status(401).json({ message: "Non autorisé, token manquant" });
+    }
+    // Vérification du token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = await User.findById(decoded.id).select("-password");
+    next();
+  } catch (error) {
+    console.error(error);
+    res.status(401).json({ message: "Non autorisé, token invalide" });
   }
-}
-
+};

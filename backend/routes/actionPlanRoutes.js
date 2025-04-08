@@ -1,27 +1,29 @@
 const express = require("express")
 const router = express.Router()
-const { protect } = require("../middleware/authMiddleware")
-const { isCoach } = require("../middleware/roleMiddleware")
 const {
   createActionPlan,
   getUserActionPlans,
-  getCoachActionPlans,
   getActionPlan,
   updateActionPlan,
-  addTask,
-  updateTaskStatus,
+  deleteActionPlan,
+  getAllActionPlans,
+  addProgressUpdate,
 } = require("../controllers/actionPlanController")
+const { protect } = require("../middleware/authMiddleware")
+const { isCoach } = require("../middleware/roleMiddleware")
+
+// Routes protégées
+router.use(protect)
+
+// Routes pour tous les utilisateurs
+router.get("/user/:userId", getUserActionPlans)
+router.get("/:id", getActionPlan)
+router.post("/:id/progress", addProgressUpdate)
+router.put("/:id", updateActionPlan)
 
 // Routes pour les coachs
-router.post("/", protect, isCoach, createActionPlan)
-router.get("/coach", protect, isCoach, getCoachActionPlans)
-router.put("/:planId", protect, isCoach, updateActionPlan)
-router.post("/:planId/tasks", protect, isCoach, addTask)
-
-// Routes pour les utilisateurs et coachs
-router.get("/user/:userId", protect, getUserActionPlans)
-router.get("/:planId", protect, getActionPlan)
-router.put("/:planId/tasks/:taskId", protect, updateTaskStatus)
+router.post("/", isCoach, createActionPlan)
+router.delete("/:id", isCoach, deleteActionPlan)
+router.get("/", isCoach, getAllActionPlans)
 
 module.exports = router
-

@@ -1,36 +1,38 @@
 const mongoose = require("mongoose")
 
-const taskSchema = new mongoose.Schema({
-  description: {
-    type: String,
-    required: [true, "Une description est requise"],
-  },
-  completed: {
-    type: Boolean,
-    default: false,
-  },
-  dueDate: {
-    type: Date,
-  },
-})
-
-const planActionSchema = new mongoose.Schema(
+const MessageSchema = new mongoose.Schema(
   {
-    userId: {
+    sender: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      refPath: "senderModel",
       required: true,
     },
-    tasks: [taskSchema],
-    date: {
-      type: Date,
-      default: Date.now,
+    senderModel: {
+      type: String,
+      enum: ["User", "Coach"],
+      required: true,
+    },
+    receiver: {
+      type: mongoose.Schema.Types.ObjectId,
+      refPath: "receiverModel",
+      required: true,
+    },
+    receiverModel: {
+      type: String,
+      enum: ["User", "Coach"],
+      required: true,
+    },
+    content: {
+      type: String,
+      required: [true, "Le message ne peut pas être vide"],
+      trim: true,
+    },
+    read: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true },
 )
 
-const PlanAction = mongoose.model("PlanAction", planActionSchema)
-
-module.exports = PlanAction
-
+module.exports = mongoose.model("Message", MessageSchema)

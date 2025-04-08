@@ -1,6 +1,6 @@
 import React from 'react';
 import PlanAction from "../components/PlanAction";
-import "../styles.css";
+import "../diagnostic.css";
 
 const Diagnostic = () => {
   return (

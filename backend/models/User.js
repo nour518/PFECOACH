@@ -41,9 +41,10 @@ const userSchema = new mongoose.Schema(
       default: true,
       select: false,
     },
+    // Association à un coach
     coach: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "User", // ou "Coach" selon ton architecture
     },
     diagnostic: {
       type: String,
@@ -57,7 +58,7 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Hachage du mot de passe
+// Hachage du mot de passe si modifié
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   const salt = await bcrypt.genSalt(12);
@@ -65,7 +66,7 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-// Token JWT
+// Méthode pour générer le token JWT
 userSchema.methods.generateAuthToken = function () {
   return jwt.sign({ id: this._id, role: this.role }, process.env.JWT_SECRET, {
     expiresIn: "30d",
