@@ -11,12 +11,12 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import CoachDashboard from "./pages/CoachDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
-import TestManagement from "./pages/TestManagement";
+
 import UserDashboard from './pages/UserDashboard';
 import PlanAction from "./components/PlanAction";
-import Subscription from "./pages/Subscription"; // Nouvelle page d'abonnement
+
 import Navbar from "./components/Navbar";
-import Profil from "./components/Profil";
+
 import Footer from "./components/Footer";
 import './pages/home.css';
 
@@ -60,18 +60,17 @@ function App() {
       element: <Layout />,
       children: [
         { index: true, element: <Home /> },
-      { path: "test", element: <Test /> }, // Mise à jour
+
         { path: "result", element: <Result /> }, // Mise à jour
         { path: "contact", element: <Contact /> },
         { path: "diagnostic", element: <Diagnostic /> },
         { path: "planaction", element: <PlanAction /> },
-        { path: "subscription", element: <Subscription /> }, // Nouvelle route
+   
         { path: "demo", element: <Demo /> },
         { path: "signup", element: <Signup /> },
         { path: "login", element: <Login /> },
         { path: "admin-dashboard", element: <AdminDashboard /> },
-        { path: "test-management", element: <TestManagement /> },
-        { path: "profil", element: <Profil />} ,
+ 
         { path: "user-dashboard", 
           element: (
             <ProtectedRoute>
