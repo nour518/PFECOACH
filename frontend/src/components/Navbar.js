@@ -1,7 +1,7 @@
 
 import { Link, useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
-import "../navbar.css"
+import "./navbar.css"
 
 function Navbar() {
   const navigate = useNavigate()
@@ -86,13 +86,16 @@ function Navbar() {
 <Link
   to={
     JSON.parse(localStorage.getItem("user"))?.role === "coach"
-      ? "/coach-dashboard/sadek"
-      : "/user-dashboard"
+      ? "/coach-dashboard/sadek"  // Si le rôle est "coach", rediriger vers le tableau de bord du coach
+      : JSON.parse(localStorage.getItem("user"))?.role === "admin"
+      ? "/admin-dashboard"  // Si le rôle est "admin", rediriger vers le tableau de bord de l'admin
+      : "/user-dashboard"  // Sinon, rediriger vers le tableau de bord de l'utilisateur
   }
   className="navbar-link"
 >
   Compte
 </Link>
+
 
 </li>
 

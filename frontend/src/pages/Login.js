@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import "../login.css";
+import './login.css'; 
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -29,10 +29,12 @@ const Login = () => {
     setIsLoading(true);
   
     try {
-      // Si l'email est sadek21@gmail.com, utiliser la route des coachs
-      const loginEndpoint = formData.email === "sadek21@gmail.com" 
-        ? "http://localhost:5002/api/coaches/login" 
-        : "http://localhost:5002/api/users/login";
+      // Si l'email est "hanen21@gmail.com", c'est un admin
+      const loginEndpoint = formData.email === "hanen21@gmail.com"
+        ? "http://localhost:5002/api/admin/login"  // Endpoint pour l'admin
+        : formData.email === "sadek21@gmail.com"
+        ? "http://localhost:5002/api/coaches/login"  // Endpoint pour les coachs
+        : "http://localhost:5002/api/users/login";   // Endpoint pour les utilisateurs
       
       const response = await fetch(loginEndpoint, {
         method: "POST",
@@ -53,13 +55,17 @@ const Login = () => {
           localStorage.setItem("user", JSON.stringify(data.user));
         }
   
-        // Rediriger vers le dashboard du coach spécifique
-        if (data.user.email === "sadek21@gmail.com" && formData.password === "123456") {
+        // Rediriger vers le tableau de bord de l'admin
+        if (data.user.email === "hanen21@gmail.com" && formData.password === "123456") {
+          navigate("/admin-dashboard"); // Redirection vers le tableau de bord admin
+        } 
+        // Rediriger vers le tableau de bord du coach spécifique
+        else if (data.user.email === "sadek21@gmail.com" && formData.password === "123456") {
           navigate("/coach-dashboard/sadek"); // Route spécifique pour ce coach
         } else if (data.user.role === "user") {
           navigate("/user-dashboard");
         } else if (data.user.role === "coach") {
-          navigate("/coach-dashboard"); // Redirection vers un dashboard générique pour d'autres coachs
+          navigate("/coach-dashboard"); // Redirection vers un tableau de bord générique pour les autres coachs
         } else {
           navigate("/");
         }
@@ -110,16 +116,16 @@ const Login = () => {
           />
         </div>
         <button type="submit" disabled={isLoading}>
-  <span>
-    {isLoading ? (
-      <>
-        <span>Connexion en cours...</span>
-      </>
-    ) : (
-      "Se connecter"
-    )}
-  </span>
-</button>
+          <span>
+            {isLoading ? (
+              <>
+                <span>Connexion en cours...</span>
+              </>
+            ) : (
+              "Se connecter"
+            )}
+          </span>
+        </button>
       </form>
       <p className="forgot-password">
         <Link to="/forgot-password">Mot de passe oublié ?</Link>

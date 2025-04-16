@@ -18,8 +18,8 @@ import Subscription from "./pages/Subscription"; // Nouvelle page d'abonnement
 import Navbar from "./components/Navbar";
 import Profil from "./components/Profil";
 import Footer from "./components/Footer";
+import './pages/home.css';
 
-import "./home.css";
 
 // Composant Layout qui inclut Navbar et Footer
 function Layout() {

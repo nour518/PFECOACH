@@ -1,50 +1,71 @@
 require('dotenv').config();
 const axios = require('axios');
 
-// Charger la clé API depuis .env
 const API_KEY = process.env.GEMINI_API_KEY;
-
-if (!API_KEY) {  // Correction ici
-  console.error("❌ Clé OpenAI/Gemini manquante !");
-  process.exit(1);
-}
-
-console.log("✅ Clé OpenAI/Gemini chargée avec succès !");
-
 const BASE_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
 
 const geminiService = {
-  generateDiagnostic: async (responses, prompt) => {
+  generateDiagnostic: async (responses, basePrompt) => {
     try {
-      console.log("Prompt envoyé à Gemini :", prompt);
+      // Structurer le prompt final
+      const fullPrompt = `
+        ${basePrompt}
+        
+        Réponses de l'utilisateur:
+        ${JSON.stringify(responses, null, 2)}
+        
+        Veuillez analyser ces réponses et fournir:
+        1. Un diagnostic clair
+        2. 3 recommandations personnalisées
+        3. Une analyse des points clés
+      `;
 
-      // Envoyer la requête à l'API Gemini
+      const requestBody = {
+        contents: [{
+          role: "user",
+          parts: [{ text: fullPrompt }]
+        }],
+        generationConfig: {
+          temperature: 0.7,
+          topP: 0.9
+        }
+      };
+
       const response = await axios.post(
         `${BASE_URL}?key=${API_KEY}`,
-        {
-          contents: [{
-            parts: [{ text: prompt }]
-          }]
-        },
+        requestBody,
         {
           headers: {
             'Content-Type': 'application/json'
-          }
+          },
+          timeout: 30000 // 30s timeout
         }
       );
 
-      console.log("Réponse de l'API Gemini :", response.data);
-
-      // Vérifier si la réponse contient des données valides
-      if (!response.data || !response.data.candidates || !response.data.candidates[0].content.parts[0].text) {
-        throw new Error("Réponse inattendue de l'API Gemini.");
+      // Nouvelle structure de réponse pour Gemini 1.5
+      const result = response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      
+      if (!result) {
+        console.error('Structure de réponse inattendue:', response.data);
+        throw new Error('Format de réponse inattendu de Gemini');
       }
 
-      // Extraire le texte généré par Gemini
-      return response.data.candidates[0].content.parts[0].text;
+      return {
+        analysis: result,
+        rawResponse: response.data // Pour le débogage
+      };
+
     } catch (error) {
-      console.error('Erreur API Gemini :', error.response ? error.response.data : error.message);
-      throw new Error('Erreur lors de la génération du diagnostic. Veuillez réessayer.');
+      console.error('Erreur Gemini:', {
+        message: error.message,
+        response: error.response?.data,
+        stack: error.stack
+      });
+      
+      throw new Error(
+        error.response?.data?.error?.message || 
+        'Erreur de communication avec le service d\'analyse'
+      );
     }
   }
 };

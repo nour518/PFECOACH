@@ -52,5 +52,4 @@ const DiagnosticSchema = new mongoose.Schema(
   },
   { timestamps: true },
 )
-
-module.exports = mongoose.model("Diagnostic", DiagnosticSchema)
+module.exports = mongoose.model("Diagnostic", DiagnosticSchema);

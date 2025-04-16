@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import "../signup.css"
+import "./signup.css"
 
 const Signup = () => {
   const [formData, setFormData] = useState({

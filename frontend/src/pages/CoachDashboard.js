@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "../coachdashbord.css";
+import './coachdashbord.css';
 
 const CoachDashboard = () => {
   const [users, setUsers] = useState([]);

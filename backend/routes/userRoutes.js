@@ -2,69 +2,48 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const validator = require("validator");
-const User = require("../models/User");
 const authMiddleware = require("../middleware/authMiddleware");
-
+const User = require("../models/User");
+const Coach = require("../models/Coach");
 const router = express.Router();
 
-// Fonction pour créer un objet erreur standardisé
 const createError = (message, statusCode) => {
   const error = new Error(message);
+  // Correction de la logique de status
   error.statusCode = statusCode;
-  error.status = `${statusCode}`.startsWith("4") ? "fail" : "error";
+  error.status = statusCode.toString().startsWith("4") ? "fail" : "error"; // La logique correcte
   return error;
 };
 
-// Inscription (Signup) avec option d'association à un coach via coachId
-router.post("/signup", async (req, res, next) => {
+const DEFAULT_COACH_ID = "67f15d3bd6e21e924d548522";
+
+router.post("/signup", async (req, res) => {
   try {
-    const { name, email, password, role, coachId } = req.body;
-    if (!name || !email || !password) {
-      return next(createError("Tous les champs sont requis", 400));
-    }
-    if (!validator.isEmail(email)) {
-      return next(createError("Veuillez fournir un email valide", 400));
-    }
-    const normalizedEmail = email.trim().toLowerCase();
-    const existingUser = await User.findOne({ email: normalizedEmail });
+    const { name, email, password } = req.body;
+
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return next(createError("Cet email est déjà utilisé.", 400));
+      return res.status(400).json({ message: "Cet email est déjà utilisé." });
     }
-    const hashedPassword = await bcrypt.hash(password, 10);
-    // Création de l'utilisateur avec le coach si coachId fourni
-    const newUser = await User.create({
-      name,
-      email: normalizedEmail,
-      password: hashedPassword,
-      role: role || "user",
-      coach: coachId || null,
-    });
-    if (!process.env.JWT_SECRET) {
-      return next(createError("Erreur interne : clé JWT manquante", 500));
+
+    const newUser = new User({ name, email, password });
+    const savedUser = await newUser.save();
+
+    const coach = await Coach.findById(DEFAULT_COACH_ID);
+    if (!coach) {
+      return res.status(500).json({ message: "Coach par défaut introuvable." });
     }
-    const token = jwt.sign(
-      { id: newUser._id, role: newUser.role },
-      process.env.JWT_SECRET,
-      { expiresIn: process.env.JWT_EXPIRES_IN || "30d" }
-    );
-    res.status(201).json({
-      status: "success",
-      token,
-      user: {
-        id: newUser._id,
-        name: newUser.name,
-        email: newUser.email,
-        role: newUser.role,
-        coach: newUser.coach,
-      },
-    });
-  } catch (err) {
-    console.error("❌ Erreur lors de l'inscription :", err);
-    next(createError("Une erreur est survenue lors de l'inscription", 500));
+
+    coach.subscribers.push(savedUser._id);
+    await coach.save();
+
+    res.status(201).json({ message: "Inscription réussie", user: savedUser });
+  } catch (error) {
+    console.error("Erreur serveur:", error);
+    res.status(500).json({ message: "Erreur serveur", error: error.message });
   }
 });
 
-// Connexion (Login)
 router.post("/login", async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -105,7 +84,6 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
-// Profil de l'utilisateur (accessible via token)
 router.get("/me", authMiddleware.protect, async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id).populate("coach", "name email");

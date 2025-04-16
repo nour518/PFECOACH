@@ -1,0 +1,134 @@
+/* signup.css */
+:root {
+    --primary: #6d28d9;
+    --primary-light: #8b5cf6;}
+  body {
+    font-family: "Segoe UI", sans-serif;
+    background-color: #f4f1ec; /* Beige doux */
+    color: #1e1e1e;
+    
+  }
+  .signup-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background: linear-gradient(90deg, var(--primary), var(--primary-light));
+  }
+  .signup-container {
+    max-width: 450px;
+    margin: 4rem auto;
+    background: #ffffff;
+    padding: 3rem;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+  }
+  
+  
+  .signup-container h2 {
+    text-align: center;
+    font-size: 2rem;
+    color: #1a2c57; /* Bleu sombre classe */
+    margin-bottom: 2rem;
+  }
+  
+  .form-group-1 {
+    margin-bottom: 1.5rem;
+  }
+  
+  label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #1a2c57;
+  }
+  
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
+    width: 90%;
+    padding: 0.9rem;
+    font-size: 1.5rem;
+    background-color: #f9fbfb;
+   
+    border-radius: 10px;
+    transition: border 0.3s;
+    border: 2px solid #e2e8f0;
+  }
+  
+  .form-group-1 input:focus {
+    outline: none;
+    border-color: var(--primary-light);
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.2);
+    background-color: #fdfafa;
+  }
+  
+  .password-requirements {
+    margin-top: 0.5rem;
+  }
+  
+  .password-requirements li {
+    margin-bottom: 0.3rem;
+  }
+  
+  /* Bouton de soumission */
+  button[type="submit"] {
+    width: 100%;
+    background-color: #1a2c57; /* Bleu sombre */
+    color: white;
+    padding: 1rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #153169;
+    transform: translateY(-2px);
+  }
+  
+  button.invalid-password {
+    background-color: #999 !important;
+    cursor: not-allowed;
+  }
+  
+  /* Spinner */
+  .loading-spinner {
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top: 3px solid white;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    animation: spin 1s linear infinite;
+    margin-right: 10px;
+  }
+  
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  /* Icone de validation */
+  .password-valid-icon {
+    margin-left: 10px;
+    color: #b3ffcc; /* Vert pastel clair */
+  }
+  
+  .error-message {
+    background-color: #ffe5e5;
+    color: #b30000;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 0.95rem;
+  }
+  

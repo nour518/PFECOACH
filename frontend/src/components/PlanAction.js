@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import "../diagnostic.css";
+
 
 const PlanAction = () => {
   const actions = [

@@ -41,10 +41,9 @@ const userSchema = new mongoose.Schema(
       default: true,
       select: false,
     },
-    // Association à un coach
     coach: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User", // ou "Coach" selon ton architecture
+      ref: "User",
     },
     diagnostic: {
       type: String,
@@ -54,19 +53,30 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "Aucun plan encore défini.",
     },
+    testResponses: {
+      type: [String],
+      default: []
+    },
+ 
+    
+    subscriptionStatus: {
+      type: String,
+      default: "active",
+    },
+    subscriptionDate: {
+      type: Date,
+      default: Date.now,
+    },
   },
   { timestamps: true }
 );
 
-// Hachage du mot de passe si modifié
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
-  const salt = await bcrypt.genSalt(12);
-  this.password = await bcrypt.hash(this.password, salt);
+  this.password = await bcrypt.hash(this.password, 10);
   next();
 });
 
-// Méthode pour générer le token JWT
 userSchema.methods.generateAuthToken = function () {
   return jwt.sign({ id: this._id, role: this.role }, process.env.JWT_SECRET, {
     expiresIn: "30d",
